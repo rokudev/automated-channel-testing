@@ -1,0 +1,5 @@
+# Robot framework
+robotframework==3.1.2
+
+# Roku WebDriver API calls
+requests==2.22.0
