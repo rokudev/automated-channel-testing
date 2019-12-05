@@ -80,4 +80,4 @@ To build, configure, and test the Roku WebDriver and Roku Robot Framework Librar
 
        python -m robot.run --outputdir Results --variable ip_address:192.168.1.94 --variable server_path:D:/projects/go/webDriver/src/main.exe  Tests/Basic_tests.robot
 
-   10. View the generated test case report and log, which are stored in the specified output directory.
+10. View the generated test case report and log, which are stored in the specified output directory.
