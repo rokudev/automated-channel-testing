@@ -15,7 +15,7 @@ To build, configure, and test the Roku WebDriver and Roku Robot Framework Librar
 1. [Download](https://golang.org/dl/) and install the Go programming language (the Roku WebDriver server is implemented as a Go application). 
 
 
-2. Clone the [Roku automated channel testing repository](https://gitlab.eng.roku.com/developer_web_tools/roku-automated-channel-testing) or download it as a zip file.
+2. Clone the [Roku automated channel testing repository](https://github.com/rokudev/automated-channel-testing) or download it as a zip file.
 
 
 3. Set the "GOPATH" environment variable to the path of the **roku-automated-channel-testing** folder ($APP_PATH).
