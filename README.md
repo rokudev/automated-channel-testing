@@ -58,7 +58,7 @@ To build, configure, and test the Roku WebDriver and Roku Robot Framework Librar
 
    c. Sideload the sample channel (**channel.zip**) included in the **automated-channel-testing-master/sample** directory. 
 
-   d. In line 2 of the sample WebDriver client application (**auotmated-channel-testing-master/sample/script/main.py**), change the IP address of the **web_driver** variable to the IP address of your Roku device. 
+   d. In line 19 of the sample WebDriver client application (**auotmated-channel-testing-master/sample/script/main.py**), change the IP address of the **web_driver** variable to the IP address of your Roku device. 
 
    e. Run the sample Web driver client application: 
 
