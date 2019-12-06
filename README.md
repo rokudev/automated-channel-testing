@@ -31,7 +31,7 @@ To build, configure, and test the Roku WebDriver and Roku Robot Framework Librar
 
         go build main.go
 
-6.  Run the **main** executable to start the Roku WebDriver server. 
+6.  Run the **main** executable in the **/automated-channel-testing-master/src** folder to start the Roku WebDriver server. 
 
 
 7. Test the Roku WebDriver server following these steps:
