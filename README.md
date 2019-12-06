@@ -67,11 +67,11 @@ To build, configure, and test the Roku WebDriver and Roku Robot Framework Librar
 
 9. Configure and test the Roku Robot Framework Library following these steps:
 
-   a. Install the dependencies listed in the **/roku-automated-channel-testing-master/RobotLibrary/requirements.txt** file:
+   a. Install the dependencies listed in the **/automated-channel-testing-master/RobotLibrary/requirements.txt** file:
 
         python -m pip install -r requirements.txt
 
-   b. Sideload the sample Robot framework test  (**channel.zip**) included in the **roku-auotmated-channel-testing-master/RobotLibrary** directory.
+   b. Sideload the sample Robot framework test  (**channel.zip**) included in the **auotmated-channel-testing-master/RobotLibrary** directory.
 
    c. Run the sample basic Robot test case (test cases must be run from the **RobotLibrary** folder to be completed successfully):
 
