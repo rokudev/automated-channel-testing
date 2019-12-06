@@ -58,25 +58,27 @@ To build, configure, and test the Roku WebDriver and Roku Robot Framework Librar
 
    c. Sideload the sample channel (**channel.zip**) included in the **roku-auotmated-channel-testing/sample** directory. 
 
-   d. Run the sample Web driver client application: 
+   d. In line 2 of the sample WebDriver client application (**roku-auotmated-channel-testing-master/sample/script/main.py**), change the IP address of the **web_driver** variable to the IP address of your Roku device. 
 
-        python <path>/roku-automated-channel-testing-develop/sample/script/main.py
+   e. Run the sample Web driver client application: 
+
+        python <path>/roku-automated-channel-testing-master/sample/script/main.py
 
 
 9. Configure and test the Roku Robot Framework Library following these steps:
 
-   a. Install the dependencies listed in the **/roku-automated-channel-testing-develop/RobotLibrary/requirements.txt** file:
+   a. Install the dependencies listed in the **/roku-automated-channel-testing-master/RobotLibrary/requirements.txt** file:
 
         python -m pip install -r requirements.txt
 
-   b. Sideload the sample Robot framework test  (**channel.zip**) included in the **roku-auotmated-channel-testing/RobotLibrary** directory.
+   b. Sideload the sample Robot framework test  (**channel.zip**) included in the **roku-auotmated-channel-master/RobotLibrary** directory.
 
    c. Run the sample basic Robot test case (test cases must be run from the **RobotLibrary** folder to be completed successfully):
 
        cd RobotLibrary
        python -m robot.run --outputdir Results Tests/Basic_tests.robot
    
-   > When running the tests and samples, you can provide the IP address and WebDriver server path as variables in the console as demonstrated in the following example: 
+   > When running the tests and samples, you can provide the Roku device IP address and WebDriver server path as variables in the console as demonstrated in the following example: 
 
        python -m robot.run --outputdir Results --variable ip_address:192.168.1.94 --variable server_path:D:/projects/go/webDriver/src/main.exe  Tests/Basic_tests.robot
 
