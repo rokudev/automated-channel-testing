@@ -15,7 +15,7 @@ To build, configure, and test the Roku WebDriver and Roku Robot Framework Librar
 1. [Download](https://golang.org/dl/) and install the Go programming language (the Roku WebDriver server is implemented as a Go application). 
 
 
-2. Clone the [Roku automated channel testing repository](https://github.com/rokudev/automated-channel-testing) or download it as a zip file.
+2. Clone this repository or download it as a zip file.
 
 
 3. Set the "GOPATH" environment variable to the path of the **automated-channel-testing-master** folder ($APP_PATH).
@@ -23,7 +23,7 @@ To build, configure, and test the Roku WebDriver and Roku Robot Framework Librar
 
 4. Install the following dependencies ([mux](https://github.com/gorilla/mux/blob/master/README.md) is a URL router and dispatcher; [logrus](https://github.com/sirupsen/logrus/blob/master/README.md) is a structured logger):
 
-        cd <path>/automated-channel-testing-develop/src
+        cd <path>/automated-channel-testing-master/src
         go get github.com/gorilla/mux
         go get github.com/sirupsen/logrus
 
@@ -58,7 +58,7 @@ To build, configure, and test the Roku WebDriver and Roku Robot Framework Librar
 
    c. Sideload the sample channel (**channel.zip**) included in the **automated-channel-testing-master/sample** directory. 
 
-   d. In line 19 of the sample WebDriver client application (**auotmated-channel-testing-master/sample/script/main.py**), change the IP address of the **web_driver** variable to the IP address of your Roku device. 
+   d. In line 19 of the sample WebDriver client application (**automated-channel-testing-master/sample/script/main.py**), change the IP address of the **web_driver** variable to the IP address of your Roku device. 
 
    e. Run the sample Web driver client application: 
 
@@ -71,7 +71,7 @@ To build, configure, and test the Roku WebDriver and Roku Robot Framework Librar
 
         python -m pip install -r requirements.txt
 
-   b. Sideload the sample Robot framework test  (**channel.zip**) included in the **auotmated-channel-testing-master/RobotLibrary** directory.
+   b. Sideload the sample Robot framework test  (**channel.zip**) included in the **automated-channel-testing-master/RobotLibrary** directory.
 
    c. Run the sample basic Robot test case (test cases must be run from the **RobotLibrary** folder to be completed successfully):
 
