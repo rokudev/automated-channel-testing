@@ -2,6 +2,8 @@
 
 Roku channel developers can use Roku's test automation software to write and execute test cases, including channel purchasing, performance, deep linking, and other certification-related testing. Roku provides custom Selenium-based WebDriver APIs for sending commands to launch channels, send keypresses, and check whether a specific screen has been loaded. Channels can use the WebDriver APIs to control a Roku device, while using a test framework or programming language to create, run, log, and record test cases. To make automated testing even easier, this software includes a library for creating Robot framework-compliant test cases.
 
+> Roku's test automation tools require Roku OS 9.1 or higher. 
+
 ## Overview
 
 Test cases can be written with the Roku Robot Framework Library (or another test framework) or a programming language such as Python, Java, or Go. The test scripts send command requests to the Roku WebDriver via the [JSON Wire Protocol](https://github.com/SeleniumHQ/selenium/wiki/JsonWireProtocol). 
