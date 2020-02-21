@@ -16,11 +16,11 @@
 package ecpClient
 
 import (
+	"encoding/xml"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/url"
 	"testing"
-	"encoding/xml"
 )
 
 var testRequest = &http.Request{Method: "GET", URL: base, Body: nil}
@@ -105,8 +105,9 @@ func TestClient_CallKeyDownSuccessResponse(t *testing.T) {
 
 func TestClient_CallLaunchNoResponse(t *testing.T) {
 	httpClient := GetMockedClient(nil)
-
-	resp, err := httpClient.LaunchChannel("11111", "", "")
+	m := make(map[string]interface{})
+	m["channelId"] = "1111"
+	resp, err := httpClient.LaunchChannel(m)
 	assert.NotNil(t, err)
 	assert.Equal(t, resp, false)
 	assert.IsType(t, new(url.Error), err)
@@ -115,7 +116,8 @@ func TestClient_CallLaunchNoResponse(t *testing.T) {
 func TestClient_CallLaunchInvalidData(t *testing.T) {
 	httpClient := GetMockedClient(nil)
 
-	resp, err := httpClient.LaunchChannel("", "", "")
+	m := make(map[string]interface{})
+	resp, err := httpClient.LaunchChannel(m)
 	assert.NotNil(t, err)
 	assert.Equal(t, resp, false)
 	assert.Equal(t, err.Error(), "the channelId is required")
@@ -123,8 +125,9 @@ func TestClient_CallLaunchInvalidData(t *testing.T) {
 
 func TestClient_CallLaunchSuccessResponse(t *testing.T) {
 	httpClient := GetMockedClient(&SuccessResponseMock)
-
-	resp, err := httpClient.LaunchChannel("dev", "", "")
+	m := make(map[string]interface{})
+	m["channelId"] = "dev"
+	resp, err := httpClient.LaunchChannel(m)
 	assert.Nil(t, err)
 	assert.Equal(t, resp, true)
 }
@@ -353,4 +356,3 @@ func TestClient_CallAppUiNoResponse(t *testing.T) {
 	assert.NotNil(t, err)
 	assert.Nil(t, resp)
 }
-

@@ -1,0 +1,7 @@
+main
+src/main
+src/github.com
+src/golang.org
+src/gopkg.in
+pkg
+.vscode

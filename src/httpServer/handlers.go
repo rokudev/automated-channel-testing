@@ -16,15 +16,16 @@
 package httpServer
 
 import (
-    "net/http"
-    "encoding/json"
     ecp "ecpClient"
-    "io/ioutil"
+	"encoding/json"
+	"fmt"
     "github.com/gorilla/mux"
+	"io/ioutil"
+	"net/http"
+	"runtime"
+	"strconv"
     "strings"
     "time"
-    "strconv"
-    "runtime"
     "version"
 )
 
@@ -345,19 +346,20 @@ func (s *Server) GetElementHandler() appHandler {
  func (s *Server) GetLaunchHandler() appHandler { 
     return func(w http.ResponseWriter, r *http.Request) *appError {
         client, id, errorInfo := s.getClient(r)
-        if  errorInfo != nil {
+		    if errorInfo != nil {
             return errorInfo
         }
         b, err := ioutil.ReadAll(r.Body)
-        var t ChannelRequest
+        t := make(map[string]interface{})
         err = json.Unmarshal(b, &t)
         if err != nil {
-            return &appError{ err.Error(), http.StatusBadRequest, nil}
+			return &appError{err.Error(), http.StatusBadRequest, nil}
         }
-        if len(t.ChannelId) == 0 {
-            return  &appError{ "The \"channelId\" is required", http.StatusBadRequest, nil}
+        fmt.Println("map:", t)
+        if _, present := t["channelId"]; !present {
+            return &appError{"The \"channelId\" is required", http.StatusBadRequest, nil}
         }
-        res, err := client.LaunchChannel(t.ChannelId, t.ContentId, t.ContentType)
+        res, err := client.LaunchChannel(t)
         if err !=nil || res == false {
             status := responseStatuses["UnknownError"]
             return &appError{ err.Error(), http.StatusInternalServerError, &status}

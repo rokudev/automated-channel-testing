@@ -16,13 +16,13 @@
 package ecpClient
 
 import (
+	"errors"
 	"fmt"
+	"image"
 	"io"
 	"net/http"
 	"net/url"
 	"time"
-	"image"
-	"errors"
 )
 
 const RequestTimeoutMilliseconds = 30000
@@ -34,7 +34,7 @@ var endpointsMap = map[string]string{
 	"activeApp": "query/active-app",
 	"apps":      "query/apps",
 	"install":   "install/%s",
-	"launch":    "launch/%s?contentId=%s&mediaType=%s",
+	"launch":    "launch/%s%s",
 	"icon":      "query/icon/%s",
 	"device":    "query/device-info",
 	"keypress":  "keypress/%s",
@@ -223,11 +223,31 @@ func (ec *EcpClient) InstallChannel(channelId string) (bool, error) {
 	return ec.makeNavigationRequest("POST", end)
 }
 
-func (ec *EcpClient) LaunchChannel(channelId string, contentId  string , mediaType string ) (bool, error) {
-	if len(channelId) == 0 {
-		return false, errors.New("the channelId is required")
+func (ec *EcpClient) LaunchChannel(parameters map[string]interface{}) (bool, error) {
+
+	var channelId = parameters["channelId"]
+	var channelStr string
+	switch channelId.(type){
+		case string:
+			channelStr = channelId.(string)
+		case nil:
+			return false, errors.New("the channelId is required")
+		default:
+			return false, errors.New("the channelId must be a string")
 	}
-	end, err := url.Parse(fmt.Sprintf(endpointsMap["launch"], channelId, contentId, mediaType))
+	var paramString string = ""
+	delete(parameters, "channelId")
+	delete(parameters, "timeout")
+	delete(parameters, "ip")
+	delete(parameters, "pressDelay")
+	for key, value := range parameters {
+		if paramString == "" {
+			paramString += "?" + key + "=" + value.(string)
+		} else {
+			paramString += "&" + key + "=" + value.(string)
+		}
+	}
+	end, err := url.Parse(fmt.Sprintf(endpointsMap["launch"], channelStr, paramString))
 	if err != nil {
 		return false, err
 	}
