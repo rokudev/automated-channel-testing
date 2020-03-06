@@ -17,7 +17,7 @@ package ecpClient
 
 var SuccessResponseMock = `{}`
 
-var AppResponseMock =`<?xml version="1.0" encoding="UTF-8" ?>
+var AppResponseMock = `<?xml version="1.0" encoding="UTF-8" ?>
 <active-app>
     <app id="test" subtype="test" type="test" version="test">test</app>
 </active-app>`
@@ -28,7 +28,7 @@ var AppsResponseMock = `<?xml version="1.0" encoding="UTF-8" ?>
     <app id="test2" subtype="test2" type="test2" version="test2">test2</app>
 </apps>`
 
-var deviceInfoResponse =`<?xml version="1.0" encoding="UTF-8" ?>
+var deviceInfoResponse = `<?xml version="1.0" encoding="UTF-8" ?>
 <device-info>
     <udn>test</udn>
     <serial-number>test</serial-number>

@@ -16,13 +16,14 @@
 package httpServer
 
 import (
-	"github.com/gorilla/mux"
-	"github.com/stretchr/testify/assert"
+	"bytes"
 	"net/http"
 	"net/http/httptest"
 	"testing"
-	ecp "ecpClient"
-	"bytes"
+
+	"github.com/gorilla/mux"
+	ecp "github.com/rokudev/automated-channel-testing/pkg/ecpClient"
+	"github.com/stretchr/testify/assert"
 )
 
 var sessionId = "test"
@@ -33,9 +34,8 @@ func checkError(err error, t *testing.T) {
 	}
 }
 
-
 func checkSuccessStatus(code int, t *testing.T) {
-	if  code != http.StatusOK {
+	if code != http.StatusOK {
 		t.Errorf("Status code differs. Expected %d.\n Got %d", http.StatusOK, code)
 	}
 }
@@ -44,18 +44,18 @@ func GetMockedServerWithSession(res *string) *Server {
 	sessions := make(map[string]*SessionInfo)
 	sessions[sessionId] = &SessionInfo{
 		capability: &Capability{},
-		client: ecp.GetMockedClient(res),
+		client:     ecp.GetMockedClient(res),
 	}
 	server := &Server{
-		router: mux.NewRouter(),
+		router:   mux.NewRouter(),
 		sessions: sessions,
-	}	
+	}
 	return server
 }
 
 func TestAppsHandlerWithValidGet(t *testing.T) {
-    req, err := http.NewRequest(http.MethodGet, "/session/test/apps", nil)
-    server := GetMockedServerWithSession(&ecp.AppsResponseMock)
+	req, err := http.NewRequest(http.MethodGet, "/session/test/apps", nil)
+	server := GetMockedServerWithSession(&ecp.AppsResponseMock)
 	checkError(err, t)
 	rr := httptest.NewRecorder()
 	r := mux.NewRouter()
@@ -66,8 +66,8 @@ func TestAppsHandlerWithValidGet(t *testing.T) {
 }
 
 func TestCurrentAppHandlerWithValidGet(t *testing.T) {
-    req, err := http.NewRequest(http.MethodGet, "/session/test/apps", nil)
-    server := GetMockedServerWithSession(&ecp.AppResponseMock)
+	req, err := http.NewRequest(http.MethodGet, "/session/test/apps", nil)
+	server := GetMockedServerWithSession(&ecp.AppResponseMock)
 	checkError(err, t)
 	rr := httptest.NewRecorder()
 	r := mux.NewRouter()
@@ -78,8 +78,8 @@ func TestCurrentAppHandlerWithValidGet(t *testing.T) {
 }
 
 func TestPressButtonHandlerWithValidPost(t *testing.T) {
-    req, err := http.NewRequest(http.MethodPost, "/session/test/press",  bytes.NewBuffer([]byte(`{"button" : "up"}`)))
-    server := GetMockedServerWithSession(&ecp.SuccessResponseMock)
+	req, err := http.NewRequest(http.MethodPost, "/session/test/press", bytes.NewBuffer([]byte(`{"button" : "up"}`)))
+	server := GetMockedServerWithSession(&ecp.SuccessResponseMock)
 	checkError(err, t)
 	rr := httptest.NewRecorder()
 	r := mux.NewRouter()
@@ -90,8 +90,8 @@ func TestPressButtonHandlerWithValidPost(t *testing.T) {
 }
 
 func TestPressButtonSequenceHandlerWithValidPost(t *testing.T) {
-    req, err := http.NewRequest(http.MethodPost, "/session/test/press",  bytes.NewBuffer([]byte(`{"button_sequence" : ["up", "right"]}`)))
-    server := GetMockedServerWithSession(&ecp.SuccessResponseMock)
+	req, err := http.NewRequest(http.MethodPost, "/session/test/press", bytes.NewBuffer([]byte(`{"button_sequence" : ["up", "right"]}`)))
+	server := GetMockedServerWithSession(&ecp.SuccessResponseMock)
 	checkError(err, t)
 	rr := httptest.NewRecorder()
 	r := mux.NewRouter()
@@ -102,8 +102,8 @@ func TestPressButtonSequenceHandlerWithValidPost(t *testing.T) {
 }
 
 func TestInstallHandlerWithValidPost(t *testing.T) {
-    req, err := http.NewRequest(http.MethodPost, "/session/test/install",  bytes.NewBuffer([]byte(`{"channelId" : "dev"}`)))
-    server := GetMockedServerWithSession(&ecp.SuccessResponseMock)
+	req, err := http.NewRequest(http.MethodPost, "/session/test/install", bytes.NewBuffer([]byte(`{"channelId" : "dev"}`)))
+	server := GetMockedServerWithSession(&ecp.SuccessResponseMock)
 	checkError(err, t)
 	rr := httptest.NewRecorder()
 	r := mux.NewRouter()
@@ -114,8 +114,8 @@ func TestInstallHandlerWithValidPost(t *testing.T) {
 }
 
 func TestLaunchHandlerWithValidPost(t *testing.T) {
-    req, err := http.NewRequest(http.MethodPost, "/session/test/launch",  bytes.NewBuffer([]byte(`{"channelId" : "dev"}`)))
-    server := GetMockedServerWithSession(&ecp.SuccessResponseMock)
+	req, err := http.NewRequest(http.MethodPost, "/session/test/launch", bytes.NewBuffer([]byte(`{"channelId" : "dev"}`)))
+	server := GetMockedServerWithSession(&ecp.SuccessResponseMock)
 	checkError(err, t)
 	rr := httptest.NewRecorder()
 	r := mux.NewRouter()
@@ -126,8 +126,8 @@ func TestLaunchHandlerWithValidPost(t *testing.T) {
 }
 
 func TestDeleteSessionWithValidDelete(t *testing.T) {
-    req, err := http.NewRequest(http.MethodDelete, "/session/test",  nil)
-    server := GetMockedServerWithSession(&ecp.SuccessResponseMock)
+	req, err := http.NewRequest(http.MethodDelete, "/session/test", nil)
+	server := GetMockedServerWithSession(&ecp.SuccessResponseMock)
 	checkError(err, t)
 	rr := httptest.NewRecorder()
 	r := mux.NewRouter()
@@ -138,8 +138,8 @@ func TestDeleteSessionWithValidDelete(t *testing.T) {
 }
 
 func TestSessionWithValidGet(t *testing.T) {
-    req, err := http.NewRequest(http.MethodGet, "/session/test",  nil)
-    server := GetMockedServerWithSession(&ecp.SuccessResponseMock)
+	req, err := http.NewRequest(http.MethodGet, "/session/test", nil)
+	server := GetMockedServerWithSession(&ecp.SuccessResponseMock)
 	checkError(err, t)
 	rr := httptest.NewRecorder()
 	r := mux.NewRouter()
@@ -150,8 +150,8 @@ func TestSessionWithValidGet(t *testing.T) {
 }
 
 func TestSessionsInfoWithValidGet(t *testing.T) {
-    req, err := http.NewRequest(http.MethodGet, "/sessions",  nil)
-    server := GetMockedServerWithSession(&ecp.SuccessResponseMock)
+	req, err := http.NewRequest(http.MethodGet, "/sessions", nil)
+	server := GetMockedServerWithSession(&ecp.SuccessResponseMock)
 	checkError(err, t)
 	rr := httptest.NewRecorder()
 	r := mux.NewRouter()
@@ -162,8 +162,8 @@ func TestSessionsInfoWithValidGet(t *testing.T) {
 }
 
 func TestTimeoutsWithValidPost(t *testing.T) {
-    req, err := http.NewRequest(http.MethodPost, "/sessions/test/timeouts",  bytes.NewBuffer([]byte(`{"type" : "implicit", "ms": 10}`)))
-    server := GetMockedServerWithSession(&ecp.SuccessResponseMock)
+	req, err := http.NewRequest(http.MethodPost, "/sessions/test/timeouts", bytes.NewBuffer([]byte(`{"type" : "implicit", "ms": 10}`)))
+	server := GetMockedServerWithSession(&ecp.SuccessResponseMock)
 	checkError(err, t)
 	rr := httptest.NewRecorder()
 	r := mux.NewRouter()
@@ -174,8 +174,8 @@ func TestTimeoutsWithValidPost(t *testing.T) {
 }
 
 func TestTimeoutImplicitWithValidPost(t *testing.T) {
-    req, err := http.NewRequest(http.MethodPost, "/sessions/test/timeouts/implicit_wait",  bytes.NewBuffer([]byte(`{"ms": 10}`)))
-    server := GetMockedServerWithSession(&ecp.SuccessResponseMock)
+	req, err := http.NewRequest(http.MethodPost, "/sessions/test/timeouts/implicit_wait", bytes.NewBuffer([]byte(`{"ms": 10}`)))
+	server := GetMockedServerWithSession(&ecp.SuccessResponseMock)
 	checkError(err, t)
 	rr := httptest.NewRecorder()
 	r := mux.NewRouter()
@@ -185,10 +185,9 @@ func TestTimeoutImplicitWithValidPost(t *testing.T) {
 	assert.JSONEq(t, validResponseWithNullValue, rr.Body.String(), "Response body differs")
 }
 
-
 func TestTimeoutPressWithValidPost(t *testing.T) {
-    req, err := http.NewRequest(http.MethodPost, "/sessions/test/timeouts/press_wait",  bytes.NewBuffer([]byte(`{"ms": 10}`)))
-    server := GetMockedServerWithSession(&ecp.SuccessResponseMock)
+	req, err := http.NewRequest(http.MethodPost, "/sessions/test/timeouts/press_wait", bytes.NewBuffer([]byte(`{"ms": 10}`)))
+	server := GetMockedServerWithSession(&ecp.SuccessResponseMock)
 	checkError(err, t)
 	rr := httptest.NewRecorder()
 	r := mux.NewRouter()
@@ -199,11 +198,11 @@ func TestTimeoutPressWithValidPost(t *testing.T) {
 }
 
 func TestElementWithValidPost(t *testing.T) {
-    req, err := http.NewRequest(http.MethodPost, "/session/test/element",  bytes.NewBuffer([]byte(`{"elementData": [{
+	req, err := http.NewRequest(http.MethodPost, "/session/test/element", bytes.NewBuffer([]byte(`{"elementData": [{
 		"using": "tag",
 		"value": "Poster"
 	}]}`)))
-    server := GetMockedServerWithSession(&ecp.UiResponseMock)
+	server := GetMockedServerWithSession(&ecp.UiResponseMock)
 	checkError(err, t)
 	rr := httptest.NewRecorder()
 	r := mux.NewRouter()
@@ -214,11 +213,11 @@ func TestElementWithValidPost(t *testing.T) {
 }
 
 func TestElementsWithValidPost(t *testing.T) {
-    req, err := http.NewRequest(http.MethodPost, "/session/test/elements",  bytes.NewBuffer([]byte(`{ "elementData": [{
+	req, err := http.NewRequest(http.MethodPost, "/session/test/elements", bytes.NewBuffer([]byte(`{ "elementData": [{
 		"using": "tag",
 		"value": "Poster"
 	}]}`)))
-    server := GetMockedServerWithSession(&ecp.UiResponseMock)
+	server := GetMockedServerWithSession(&ecp.UiResponseMock)
 	checkError(err, t)
 	rr := httptest.NewRecorder()
 	r := mux.NewRouter()
@@ -228,10 +227,9 @@ func TestElementsWithValidPost(t *testing.T) {
 	assert.JSONEq(t, validElementsResponse, rr.Body.String(), "Response body differs")
 }
 
-
 func TestElementWithInvalidPost(t *testing.T) {
-    req, err := http.NewRequest(http.MethodPost, "/session/test/element",  bytes.NewBuffer([]byte(`{}`)))
-    server := GetMockedServerWithSession(&ecp.UiResponseMock)
+	req, err := http.NewRequest(http.MethodPost, "/session/test/element", bytes.NewBuffer([]byte(`{}`)))
+	server := GetMockedServerWithSession(&ecp.UiResponseMock)
 	checkError(err, t)
 	rr := httptest.NewRecorder()
 	r := mux.NewRouter()
@@ -241,8 +239,8 @@ func TestElementWithInvalidPost(t *testing.T) {
 }
 
 func TestElementsWithInvalidPost(t *testing.T) {
-    req, err := http.NewRequest(http.MethodPost, "/session/test/elements",  bytes.NewBuffer([]byte(`{}`)))
-    server := GetMockedServerWithSession(&ecp.UiResponseMock)
+	req, err := http.NewRequest(http.MethodPost, "/session/test/elements", bytes.NewBuffer([]byte(`{}`)))
+	server := GetMockedServerWithSession(&ecp.UiResponseMock)
 	checkError(err, t)
 	rr := httptest.NewRecorder()
 	r := mux.NewRouter()
@@ -252,8 +250,8 @@ func TestElementsWithInvalidPost(t *testing.T) {
 }
 
 func TestTimeoutImplicitWithInvalidPost(t *testing.T) {
-    req, err := http.NewRequest(http.MethodPost, "/sessions/test/timeouts/implicit_wait",  bytes.NewBuffer([]byte(`{"ms": -5}`)))
-    server := GetMockedServerWithSession(&ecp.SuccessResponseMock)
+	req, err := http.NewRequest(http.MethodPost, "/sessions/test/timeouts/implicit_wait", bytes.NewBuffer([]byte(`{"ms": -5}`)))
+	server := GetMockedServerWithSession(&ecp.SuccessResponseMock)
 	checkError(err, t)
 	rr := httptest.NewRecorder()
 	r := mux.NewRouter()
@@ -263,8 +261,8 @@ func TestTimeoutImplicitWithInvalidPost(t *testing.T) {
 }
 
 func TestInstallHandlerWithInvalidPost(t *testing.T) {
-    req, err := http.NewRequest(http.MethodPost, "/session/test/install",  bytes.NewBuffer([]byte(`{}`)))
-    server := GetMockedServerWithSession(&ecp.SuccessResponseMock)
+	req, err := http.NewRequest(http.MethodPost, "/session/test/install", bytes.NewBuffer([]byte(`{}`)))
+	server := GetMockedServerWithSession(&ecp.SuccessResponseMock)
 	checkError(err, t)
 	rr := httptest.NewRecorder()
 	r := mux.NewRouter()
@@ -274,8 +272,8 @@ func TestInstallHandlerWithInvalidPost(t *testing.T) {
 }
 
 func TestLaunchHandlerWithInvalidPost(t *testing.T) {
-    req, err := http.NewRequest(http.MethodPost, "/session/test/launch",  bytes.NewBuffer([]byte(`{}`)))
-    server := GetMockedServerWithSession(&ecp.SuccessResponseMock)
+	req, err := http.NewRequest(http.MethodPost, "/session/test/launch", bytes.NewBuffer([]byte(`{}`)))
+	server := GetMockedServerWithSession(&ecp.SuccessResponseMock)
 	checkError(err, t)
 	rr := httptest.NewRecorder()
 	r := mux.NewRouter()
@@ -285,8 +283,8 @@ func TestLaunchHandlerWithInvalidPost(t *testing.T) {
 }
 
 func TestPressButtonHandlerWithInvalidPost(t *testing.T) {
-    req, err := http.NewRequest(http.MethodPost, "/session/test/press",  bytes.NewBuffer([]byte(`{}`)))
-    server := GetMockedServerWithSession(&ecp.SuccessResponseMock)
+	req, err := http.NewRequest(http.MethodPost, "/session/test/press", bytes.NewBuffer([]byte(`{}`)))
+	server := GetMockedServerWithSession(&ecp.SuccessResponseMock)
 	checkError(err, t)
 	rr := httptest.NewRecorder()
 	r := mux.NewRouter()

@@ -16,11 +16,11 @@
 package ecpClient
 
 import (
-	"net/http"
 	"encoding/xml"
-	"io/ioutil"
-	"image/png"
 	"image"
+	"image/png"
+	"io/ioutil"
+	"net/http"
 )
 
 func (ec *EcpClient) parseApps(res *http.Response) (*[]App, error) {
@@ -80,7 +80,6 @@ func (ec *EcpClient) parseImage(res *http.Response) (image.Image, error) {
 	}
 	return result, err
 }
-
 
 func (ec *EcpClient) parseAppUiSource(res *http.Response) ([]byte, error) {
 	data, err := ioutil.ReadAll(res.Body)

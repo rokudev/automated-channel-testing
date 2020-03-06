@@ -16,11 +16,12 @@
 package ecpClient
 
 import (
-	"github.com/stretchr/testify/assert"
+	"encoding/xml"
 	"net/http"
 	"net/url"
 	"testing"
-	"encoding/xml"
+
+	"github.com/stretchr/testify/assert"
 )
 
 var testRequest = &http.Request{Method: "GET", URL: base, Body: nil}
@@ -159,9 +160,9 @@ func TestClient_CallActiveAppSuccessResponse(t *testing.T) {
 	httpClient := GetMockedClient(&AppResponseMock)
 	resp, err := httpClient.GetActiveApp()
 	expectedResult := &App{
-		Title: "test",
-		ID: "test",
-		Type: "test",
+		Title:   "test",
+		ID:      "test",
+		Type:    "test",
 		Version: "test",
 		Subtype: "test",
 	}
@@ -181,16 +182,16 @@ func TestClient_CallAppsSuccessResponse(t *testing.T) {
 	resp, err := httpClient.GetApps()
 	expectedResult := &[]App{
 		App{
-			Title: "test",
-			ID: "test",
-			Type: "test",
+			Title:   "test",
+			ID:      "test",
+			Type:    "test",
 			Version: "test",
 			Subtype: "test",
 		},
 		App{
-			Title: "test2",
-			ID: "test2",
-			Type: "test2",
+			Title:   "test2",
+			ID:      "test2",
+			Type:    "test2",
 			Version: "test2",
 			Subtype: "test2",
 		},
@@ -210,65 +211,65 @@ func TestClient_CallDeviceInfoSuccessResponse(t *testing.T) {
 	httpClient := GetMockedClient(&deviceInfoResponse)
 	resp, err := httpClient.GetDeviceInfo()
 	expectedResult := &DeviceInfo{
-	Udn: "test",
-	SerialNumber: "test",
-	DeviceID: "test",
-	AdvertisingID: "test",
-	VendorName: "test",
-	ModelName: "test",
-	ModelNumber: "test",
-	ModelRegion: "test",
-	IsTv: "test",
-	IsStick: "test",
-	SupportsEthernet: "test",
-	WifiMac: "test",
-	WifiDriver: "test",
-	EthernetMac: "test",
-	NetworkType: "test",
-	NetworkName: "test",
-	FriendlyDeviceName: "test",
-	FriendlyModelName: "test",
-	DefaultDeviceName: "test",
-	UserDeviceName: "test",
-	UserDeviceLocation: "test",
-	BuildNumber: "test",
-	SoftwareVersion: "test",
-	SoftwareBuild: "test",
-	SecureDevice: "test",
-	Language: "test",
-	Country: "test",
-	Locale: "test",
-	TimeZoneAuto: "test",
-	TimeZone: "test",
-	TimeZoneName: "test",
-	TimeZoneTz: "test",
-	TimeZoneOffset: "test",
-	ClockFormat: "test",
-	Uptime: "test",
-	PowerMode: "test",
-	SupportsSuspend: "test",
-	SupportsFindRemote: "test",
-	FindRemoteIsPossible: "test",
-	SupportsAudioGuide: "test",
-	SupportsRva: "test",
-	DeveloperEnabled: "test",
-	KeyedDeveloperID: "test",
-	SearchEnabled: "test",
-	SearchChannelsEnabled: "test",
-	NotificationsEnabled: "test",
-	NotificationsFirstUse: "test",
-	SupportsPrivateListening: "test",
-	HeadphonesConnected: "test",
-	SupportsEcsTextedit: "test",
-	SupportsEcsMicrophone: "test", 
-	SupportsWakeOnWlan: "test",
-	HasPlayOnRoku: "test",
-	HasMobileScreensaver: "test",
-	SupportURL: "test",
-	GrandcentralVersion: "test",
-	TrcVersion: "test",
-	TrcChannelVersion: "test",
-	DavinciVersion: "test",
+		Udn:                      "test",
+		SerialNumber:             "test",
+		DeviceID:                 "test",
+		AdvertisingID:            "test",
+		VendorName:               "test",
+		ModelName:                "test",
+		ModelNumber:              "test",
+		ModelRegion:              "test",
+		IsTv:                     "test",
+		IsStick:                  "test",
+		SupportsEthernet:         "test",
+		WifiMac:                  "test",
+		WifiDriver:               "test",
+		EthernetMac:              "test",
+		NetworkType:              "test",
+		NetworkName:              "test",
+		FriendlyDeviceName:       "test",
+		FriendlyModelName:        "test",
+		DefaultDeviceName:        "test",
+		UserDeviceName:           "test",
+		UserDeviceLocation:       "test",
+		BuildNumber:              "test",
+		SoftwareVersion:          "test",
+		SoftwareBuild:            "test",
+		SecureDevice:             "test",
+		Language:                 "test",
+		Country:                  "test",
+		Locale:                   "test",
+		TimeZoneAuto:             "test",
+		TimeZone:                 "test",
+		TimeZoneName:             "test",
+		TimeZoneTz:               "test",
+		TimeZoneOffset:           "test",
+		ClockFormat:              "test",
+		Uptime:                   "test",
+		PowerMode:                "test",
+		SupportsSuspend:          "test",
+		SupportsFindRemote:       "test",
+		FindRemoteIsPossible:     "test",
+		SupportsAudioGuide:       "test",
+		SupportsRva:              "test",
+		DeveloperEnabled:         "test",
+		KeyedDeveloperID:         "test",
+		SearchEnabled:            "test",
+		SearchChannelsEnabled:    "test",
+		NotificationsEnabled:     "test",
+		NotificationsFirstUse:    "test",
+		SupportsPrivateListening: "test",
+		HeadphonesConnected:      "test",
+		SupportsEcsTextedit:      "test",
+		SupportsEcsMicrophone:    "test",
+		SupportsWakeOnWlan:       "test",
+		HasPlayOnRoku:            "test",
+		HasMobileScreensaver:     "test",
+		SupportURL:               "test",
+		GrandcentralVersion:      "test",
+		TrcVersion:               "test",
+		TrcChannelVersion:        "test",
+		DavinciVersion:           "test",
 	}
 	assert.Nil(t, err)
 	assert.Equal(t, expectedResult, resp)
@@ -284,65 +285,65 @@ func TestClient_CallDeviceInfoNoResponse(t *testing.T) {
 func TestClient_CallAppUiSuccessResponse(t *testing.T) {
 	httpClient := GetMockedClient(&UiResponseMock)
 	resp, err := httpClient.GetAppUi()
-	expectedResult :=  &Node{
-			XMLName: xml.Name{
-				Local: "MainScene",
+	expectedResult := &Node{
+		XMLName: xml.Name{
+			Local: "MainScene",
+		},
+		Attrs: []xml.Attr{
+			{
+				Name: xml.Name{
+					Local: "bounds",
+				},
+				Value: "{0, 0, 1920, 1080}",
 			},
-			Attrs: []xml.Attr{
-				{
-					Name: xml.Name{
-						Local: "bounds",
-					},
-					Value: "{0, 0, 1920, 1080}",
+			{
+				Name: xml.Name{
+					Local: "children",
 				},
-				{
-					Name: xml.Name{
-						Local: "children",
-					},
-					Value: "0",
-				},
-				{
-					Name: xml.Name{
-						Local: "extends",
-					},
-					Value: "BaseScene",
-				},
-				{
-					Name: xml.Name{
-						Local: "focusable",
-					},
-					Value: "true",
-				},
+				Value: "0",
 			},
-			Nodes: []Node{
-				{
-					XMLName: xml.Name{
-						Local: "Poster",
-					},
-					Attrs: []xml.Attr{
-						{
-							Name: xml.Name{
-								Local: "bounds",
-							},
-							Value: "{0, 0, 1920, 1080}",
-						},
-						{
-							Name: xml.Name{
-								Local: "index",
-							},
-							Value: "0",
-						},
-						{
-							Name: xml.Name{
-								Local: "loadStatus",
-							},
-							Value: "3",
-						},
-					},
-					Nodes: nil,
+			{
+				Name: xml.Name{
+					Local: "extends",
 				},
+				Value: "BaseScene",
 			},
-		}
+			{
+				Name: xml.Name{
+					Local: "focusable",
+				},
+				Value: "true",
+			},
+		},
+		Nodes: []Node{
+			{
+				XMLName: xml.Name{
+					Local: "Poster",
+				},
+				Attrs: []xml.Attr{
+					{
+						Name: xml.Name{
+							Local: "bounds",
+						},
+						Value: "{0, 0, 1920, 1080}",
+					},
+					{
+						Name: xml.Name{
+							Local: "index",
+						},
+						Value: "0",
+					},
+					{
+						Name: xml.Name{
+							Local: "loadStatus",
+						},
+						Value: "3",
+					},
+				},
+				Nodes: nil,
+			},
+		},
+	}
 	assert.Nil(t, err)
 	assert.Equal(t, expectedResult, resp)
 }
@@ -353,4 +354,3 @@ func TestClient_CallAppUiNoResponse(t *testing.T) {
 	assert.NotNil(t, err)
 	assert.Nil(t, resp)
 }
-

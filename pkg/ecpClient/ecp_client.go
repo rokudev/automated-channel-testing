@@ -16,13 +16,13 @@
 package ecpClient
 
 import (
+	"errors"
 	"fmt"
+	"image"
 	"io"
 	"net/http"
 	"net/url"
 	"time"
-	"image"
-	"errors"
 )
 
 const RequestTimeoutMilliseconds = 30000
@@ -79,7 +79,7 @@ func (ec *EcpClient) SetTimeout(timeout time.Duration) {
 }
 
 func (ec *EcpClient) GetTimeout() int {
-	ms := int(ec.HttpClient.HttpClient.Timeout/time.Millisecond)
+	ms := int(ec.HttpClient.HttpClient.Timeout / time.Millisecond)
 	return ms
 }
 
@@ -219,11 +219,11 @@ func (ec *EcpClient) InstallChannel(channelId string) (bool, error) {
 	if err != nil {
 		return false, err
 	}
- 
+
 	return ec.makeNavigationRequest("POST", end)
 }
 
-func (ec *EcpClient) LaunchChannel(channelId string, contentId  string , mediaType string ) (bool, error) {
+func (ec *EcpClient) LaunchChannel(channelId string, contentId string, mediaType string) (bool, error) {
 	if len(channelId) == 0 {
 		return false, errors.New("the channelId is required")
 	}
