@@ -16,41 +16,21 @@ To build, configure, and test the Roku WebDriver and Roku Robot Framework Librar
 
 1. [Download](https://golang.org/dl/) and install the Go programming language (the Roku WebDriver server is implemented as a Go application). 
 
+1. Clone this repository or download it as a zip file.
 
-2. Clone this repository or download it as a zip file.
+1. Run the Roku WebDriver project:
 
+    ```bash
+       go run cmd/main.go
+    ```
 
-3. Set the "GOPATH" environment variable to the path of the **automated-channel-testing-master** folder ($APP_PATH).
+1. Test the Roku WebDriver server following these steps:
 
+   ```bash
+    go test ./...
+    ```
 
-4. Install the following dependencies ([mux](https://github.com/gorilla/mux/blob/master/README.md) is a URL router and dispatcher; [logrus](https://github.com/sirupsen/logrus/blob/master/README.md) is a structured logger):
-
-        cd <path>/automated-channel-testing-master/src
-        go get github.com/gorilla/mux
-        go get github.com/sirupsen/logrus
-
-5. Build the Roku WebDriver project:
-
-        go build main.go
-
-6.  Run the **main** executable in the **/automated-channel-testing-master/src** folder to start the Roku WebDriver server. 
-
-
-7. Test the Roku WebDriver server following these steps:
-
-   a. Install the [**assert**](https://godoc.org/github.com/stretchr/testify/assert) package, which provides testing tools to be used with Go applications.
-
-        go get github.com/stretchr/testify/assert
-
-   b. Test the ECP client:
-
-        go test ecpClient
-
-   c. Test the HTTP server (the host is "localhost"; the port used is 9000):
-
-        go test httpServer
-
-8. Run Roku's Python-based sample WebDriver client application following these steps: 
+1. Run Roku's Python-based sample WebDriver client application following these steps: 
 
    a. Download and install python: https://www.python.org/downloads.
 
@@ -67,7 +47,7 @@ To build, configure, and test the Roku WebDriver and Roku Robot Framework Librar
         python <path>/automated-channel-testing-master/sample/script/main.py
 
 
-9. Configure and test the Roku Robot Framework Library following these steps:
+1. Configure and test the Roku Robot Framework Library following these steps:
 
    a. Install the dependencies listed in the **/automated-channel-testing-master/RobotLibrary/requirements.txt** file:
 
@@ -84,4 +64,4 @@ To build, configure, and test the Roku WebDriver and Roku Robot Framework Librar
 
        python -m robot.run --outputdir Results --variable ip_address:192.168.1.94 --variable server_path:D:/projects/go/webDriver/src/main.exe  Tests/Basic_tests.robot
 
-10. View the generated test case report and log, which are stored in the specified output directory.
+1. View the generated test case report and log, which are stored in the specified output directory.

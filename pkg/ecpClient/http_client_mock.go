@@ -23,6 +23,7 @@ import (
 )
 
 var base, _ = url.Parse("some.api")
+
 // RoundTripFunc .
 type RoundTripFunc func(req *http.Request) (*http.Response, error)
 
@@ -45,17 +46,16 @@ func GetMockedClient(resp *string) *EcpClient {
 	cli.HttpClient = httpClient
 
 	contentsClient := EcpClient{
-		BaseURL:        base,
-		HttpClient:     cli,
+		BaseURL:    base,
+		HttpClient: cli,
 	}
 
 	return &contentsClient
 }
 
-
 func TestingHTTPClient(resp *string) *http.Client {
 	var function func(r *http.Request) (*http.Response, error)
-	if resp != nil{
+	if resp != nil {
 		function = func(req *http.Request) (*http.Response, error) {
 			// Test request parameters
 			return &http.Response{

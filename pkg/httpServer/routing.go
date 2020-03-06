@@ -15,14 +15,14 @@
 
 package httpServer
 
-import(
+import (
 	"net/http"
 )
 
 type Route struct {
-    Method      string
-    Pattern     string
-    HandlerFunc appHandler
+	Method      string
+	Pattern     string
+	HandlerFunc appHandler
 }
 
 type Routes []Route
@@ -30,9 +30,9 @@ type Routes []Route
 func (s *Server) SetUpRoutes() {
 	routes := Routes{
 		Route{
-		   "GET",
-		   "/v1/status",
-		   s.GetStatusHandler(),
+			"GET",
+			"/v1/status",
+			s.GetStatusHandler(),
 		},
 		Route{
 			"POST",
@@ -120,14 +120,13 @@ func (s *Server) SetUpRoutes() {
 			s.GetInstallHandler(),
 		},
 	}
-		
-	
+
 	for _, route := range routes {
-        s.router.
-            Methods(route.Method).
-            Path(route.Pattern).
-            Handler(Middleware(route.HandlerFunc)).GetError()
-    }
-    s.router.NotFoundHandler = http.Handler(Middleware(s.notFound()))
+		s.router.
+			Methods(route.Method).
+			Path(route.Pattern).
+			Handler(Middleware(route.HandlerFunc)).GetError()
+	}
+	s.router.NotFoundHandler = http.Handler(Middleware(s.notFound()))
 	http.Handle("/", s.router)
 }

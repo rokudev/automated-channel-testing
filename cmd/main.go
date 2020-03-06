@@ -13,44 +13,13 @@
 //limitations under the License.
 //////////////////////////////////////////////////////////////////////////
 
-package httpServer
+package main
 
 import (
-	"github.com/gorilla/mux"
-	ecp "ecpClient"
-	"net/http"
-	"time"
-	"github.com/sirupsen/logrus"
+	"github.com/rokudev/automated-channel-testing/pkg/httpServer"
 )
 
-
-
-type Server struct {
-    router *mux.Router
-	sessions map[string]*SessionInfo
-} 
-
-type SessionInfo struct {
-	client *ecp.EcpClient
-	capability *Capability
-	pressDelay time.Duration
+func main() {
+	server := httpServer.GetServerInstance()
+	server.Start()
 }
-
-func GetServerInstance() *Server {
-	server := &Server{
-		router: mux.NewRouter(),
-		sessions: make(map[string]*SessionInfo),
-	}
-   
-	return server
-}
-
-func (s *Server) Start() {
-	s.SetUpRoutes()
-	err := http.ListenAndServe(":9000", nil)
-	if err != http.ErrServerClosed {
-	   logrus.WithError(err).Error("Http Server stopped unexpected")
-	} else {
-	   logrus.WithError(err).Info("Http Server stopped")
-	}
- }

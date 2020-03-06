@@ -15,34 +15,34 @@
 
 package httpServer
 
-import(
-    "net/http"
-    "encoding/json"
+import (
+	"encoding/json"
+	"net/http"
 )
 
 type errorResponse struct {
-    Message string `json:"message"`
+	Message string `json:"message"`
 }
 
 func Middleware(h appHandler) http.Handler {
-    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-        if e := h(w, r); e != nil { 
-            if e.InternalCode != nil {
-                w.WriteHeader(e.Code)
-                errorResponse := &errorResponse{
-                    Message: e.Message,
-                }
-                response := &SessionResponse{
-                    Status: *e.InternalCode,
-                    Value: errorResponse,
-                }
-                js, _ := json.Marshal(response)
-                w.Header().Set("Content-Type", "application/json")
-                w.Write(js)
-            } else {
-                http.Error(w, e.Message, e.Code)
-            }
-            
-        }
-    })
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if e := h(w, r); e != nil {
+			if e.InternalCode != nil {
+				w.WriteHeader(e.Code)
+				errorResponse := &errorResponse{
+					Message: e.Message,
+				}
+				response := &SessionResponse{
+					Status: *e.InternalCode,
+					Value:  errorResponse,
+				}
+				js, _ := json.Marshal(response)
+				w.Header().Set("Content-Type", "application/json")
+				w.Write(js)
+			} else {
+				http.Error(w, e.Message, e.Code)
+			}
+
+		}
+	})
 }
