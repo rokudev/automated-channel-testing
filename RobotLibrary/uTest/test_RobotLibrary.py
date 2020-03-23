@@ -115,7 +115,7 @@ class LibTests(unittest.TestCase):
         with patch('Library.webDriver.requests.post') as mock_post, self.assertRaises(Exception) as context:
             mock_post.return_value.status_code = 500
             mock_post.return_value.text = json.dumps(responseWithError)
-            self._library.send_button_sequence(["up", "up"])
+            self._library.sendButtonSequence(["up", "up"])
         self.assertTrue(errorMessage in str(context.exception))
 
     def test_send_button_sequence_success(self):
@@ -123,7 +123,7 @@ class LibTests(unittest.TestCase):
             mock_post.return_value.status_code = 200
             mock_post.return_value.text = json.dumps(respWithEmptyValue)  
             try:
-                self._library.send_button_sequence(["up", "up"])
+                self._library.sendButtonSequence(["up", "up"])
             except Exception:
                 self.fail("send_button_sequence() raised Exception unexpectedly!")
 
@@ -271,6 +271,42 @@ class LibTests(unittest.TestCase):
         with  self.assertRaises(Exception) as context:
             self._library.getAttribute(uiElement, "attrNotExist")
         self.assertTrue('Can\'t find attribute' in str(context.exception))
+
+        
+    def test_input_deep_linking_data_error(self):
+        with patch('Library.webDriver.requests.post') as mock_post, self.assertRaises(Exception) as context:
+            mock_post.return_value.status_code = 500
+            mock_post.return_value.text = json.dumps(responseWithError)
+            self._library.inputDeepLinkingData("dev", "12", "movie")
+        self.assertTrue(errorMessage in str(context.exception))
+
+
+    def test_input_deep_linking_data_success(self):
+        with patch('Library.webDriver.requests.post') as mock_post:
+            mock_post.return_value.status_code = 200
+            mock_post.return_value.text = json.dumps(respWithEmptyValue)  
+            try:
+                self._library.inputDeepLinkingData("dev", "12", "movie")
+            except Exception:
+                self.fail("inputDeepLinkingData() raised Exception unexpectedly!")
+
+    def test_side_load_error(self):
+        with patch('Library.webDriver.requests.post') as mock_post, self.assertRaises(Exception) as context:
+            mock_post.return_value.status_code = 500
+            mock_post.return_value.text = json.dumps(responseWithError)
+            self._library.sideLoad("channel.zip", "user", "pass")
+        self.assertTrue(errorMessage in str(context.exception))
+    
+    def test_side_load_data_success(self):
+        with patch('Library.webDriver.requests.post') as mock_post:
+            mock_post.return_value.status_code = 200
+            mock_post.return_value.text = json.dumps(respWithEmptyValue)  
+            try:
+                self._library.sideLoad("channel.zip", "user", "pass")
+            except Exception:
+                self.fail("inputDeepLinkingData() raised Exception unexpectedly!")
+
+        
 
     
 

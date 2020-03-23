@@ -15,15 +15,12 @@
 ########################################################################
 *** Settings ***
 Documentation  Test 2
+Variables  ./../Library/variables.py 
 Library  ./../Library/RobotLibrary.py  ${ip_address}  ${timeout}  ${pressDelay}  ${server_path}
 Library  Collections
 
 
 *** Variables ***
-${ip_address}  192.168.1.94
-${server_path}  D:/projects/go/webDriver/src/main.exe
-${timeout}  20000
-${pressDelay}  2000
 ${channel_code}  dev
 &{DetailsData}=  using=tag  value=DetailsView
 @{DetailsArray}=  &{DetailsData}
@@ -32,7 +29,7 @@ ${channel_code}  dev
 
 *** Test Cases ***
 Verify is channel launched
-    Launch the channel  ${channel_code}
+    Side load  ../channels/9_Bookmarks.zip   rokudev   aaaa
     Verify is channel loaded    ${channel_code}    
 
 Verify is details screen loaded

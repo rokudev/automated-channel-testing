@@ -15,15 +15,12 @@
 ########################################################################
 *** Settings ***
 Documentation  Basic smoke tests
+Variables  ./../Library/variables.py 
 Library  ./../Library/RobotLibrary.py  ${ip_address}  ${timeout}  ${pressDelay}  ${server_path}
 Library  Collections
 
 
 *** Variables ***
-${ip_address}  192.168.1.94
-${server_path}  D:/projects/go/webDriver/src/main.exe
-${timeout}  20000
-${pressDelay}  2000
 ${channel_code}  dev
 &{DATA2}=  using=text  value=Barack Gates, Bill Obama
 @{DATA2Array}=  &{DATA2}
@@ -41,7 +38,7 @@ ${channel_code}  dev
 
 *** Test Cases ***
 Channel should be launched
-    Launch the channel  ${channel_code}
+    Side load  ../sample/channel.zip   rokudev   aaaa
     Verify is channel loaded    ${channel_code}
 
 Check if details screen showed
@@ -52,7 +49,7 @@ Check if playback started
     ${status}  ${value}=  Run Keyword And Ignore Error  Verify is screen loaded  ${Params5}  2 
     Run keyword if   "${status}"=="PASS"  Do auth
     ...  ELSE  Send key  select
-    Verify is playback started
+    Verify is playback started  20  2
 
 *** Keywords ***
 Do auth

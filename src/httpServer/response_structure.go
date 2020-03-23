@@ -82,3 +82,7 @@ type TimeoutRequest struct {
 	Type string `json:"type"`
 	Ms int `json:"ms"`
 }
+
+type IntentRequest struct {
+	Intent string `json:"intent"`
+}

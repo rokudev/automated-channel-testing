@@ -15,43 +15,53 @@
 ########################################################################
 
 from webDriver import WebDriver
+import sys
 
-web_driver = WebDriver("192.168.1.94")
-web_driver.launch_the_channel("dev")
-web_driver.verify_is_screen_loaded({"elementData": [{
-	"using": "text",
-	"value": "ROW 1"
-}]})
+def  run(ip: str):
+    try:
+        web_driver = WebDriver(ip)
+        web_driver.launch_the_channel("dev")
+        web_driver.verify_is_screen_loaded({"elementData": [{
+            "using": "text",
+            "value": "ROW 1"
+        }]})
 
-web_driver.press_btn("select")
-web_driver.verify_is_screen_loaded({"elementData": [{
-	"using": "text",
-	"value": "Barack Gates, Bill Obama"
-}]})
+        web_driver.press_btn("select")
+        web_driver.verify_is_screen_loaded({"elementData": [{
+            "using": "text",
+            "value": "Barack Gates, Bill Obama"
+        }]})
 
-res = web_driver.verify_is_screen_loaded({"elementData": [{
-	"using": "text",
-	"value": "Authenticate to watch"
-}]}, False, 2)
-if res == False:
-    res = web_driver.verify_is_screen_loaded({"elementData": [{
-	    "using": "text",
-	    "value": "Play"
-    }]})
-    web_driver.press_btn("select")
-else:
-    web_driver.press_btn("select")
-    web_driver.verify_is_screen_loaded({"elementData": [{
-        "using": "text",
-        "value": "Please enter your username"
-    }]})
-    web_driver.send_word("user")
-    web_driver.send_button_sequence(["down", "down", "down", "down", "select"])
-    web_driver.verify_is_screen_loaded({"elementData": [{
-        "using": "text",
-        "value": "Please enter your password"
-    }]})
-    web_driver.send_word("pass")
-    web_driver.send_button_sequence(["down", "down", "down", "down", "select"])
-
-web_driver.quiet()
+        res = web_driver.verify_is_screen_loaded({"elementData": [{
+            "using": "text",
+            "value": "Authenticate to watch"
+        }]}, False, 2)
+        if res == False:
+            res = web_driver.verify_is_screen_loaded({"elementData": [{
+                "using": "text",
+                "value": "Play"
+            }]})
+            web_driver.press_btn("select")
+        else:
+            web_driver.press_btn("select")
+            web_driver.verify_is_screen_loaded({"elementData": [{
+                "using": "text",
+                "value": "Please enter your username"
+            }]})
+            web_driver.send_word("user")
+            web_driver.send_button_sequence(["down", "down", "down", "down", "select"])
+            web_driver.verify_is_screen_loaded({"elementData": [{
+                "using": "text",
+                "value": "Please enter your password"
+            }]})
+            web_driver.send_word("pass")
+            web_driver.send_button_sequence(["down", "down", "down", "down", "select"])
+        print(f"{ip}:  Test passed")
+    except  Exception as e:
+        print(f"{ip}:  Error: {e}")
+        print(f"{ip}:  Test failed")
+    finally:
+        web_driver.quiet()
+    
+if __name__ == "__main__":
+    run(sys.argv[1])

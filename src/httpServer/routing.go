@@ -36,6 +36,11 @@ func (s *Server) SetUpRoutes() {
 		},
 		Route{
 			"POST",
+			"/v1/session/{sessionId}/load",
+			s.GetLoadHandler(),
+		 },
+		Route{
+			"POST",
 			"/v1/session",
 			s.GetStartSessionHandler(),
 		},
@@ -103,6 +108,11 @@ func (s *Server) SetUpRoutes() {
 			"POST",
 			"/v1/session/{sessionId}/launch",
 			s.GetLaunchHandler(),
+		},
+		Route{
+			"POST",
+			"/v1/session/{sessionId}/input",
+			s.GetInputHandler(),
 		},
 		Route{
 			"POST",

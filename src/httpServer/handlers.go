@@ -20,12 +20,14 @@ import (
     "encoding/json"
     ecp "ecpClient"
     "io/ioutil"
+    "io"
     "github.com/gorilla/mux"
     "strings"
     "time"
     "strconv"
     "runtime"
     "version"
+    "bytes"
 )
 
 const defaultPressDelay = 1000
@@ -78,6 +80,11 @@ func (s *Server) GetStartSessionHandler() appHandler {
             status := responseStatuses["SessionNotCreatedException"]
             return &appError{ err.Error(), http.StatusInternalServerError, &status}
         }
+        plugin, err := ecp.GetPluginClient(t.Ip)
+        if err != nil {
+            status := responseStatuses["SessionNotCreatedException"]
+            return &appError{ err.Error(), http.StatusInternalServerError, &status}
+        }
         info, err := client.GetDeviceInfo()
         if err != nil {
             status := responseStatuses["SessionNotCreatedException"]
@@ -116,6 +123,7 @@ func (s *Server) GetStartSessionHandler() appHandler {
         }
         s.sessions[id] = &SessionInfo{
             client,
+            plugin,
             capability,
             time.Duration(pressDelay),
         }
@@ -209,6 +217,40 @@ func (s *Server) GetTimeoutsHandler() appHandler {
             Value: nil,
         }
         return prepareResponse(w, response)
+    }
+ }
+
+ func (s *Server) GetLoadHandler() appHandler {
+	return func(w http.ResponseWriter, r *http.Request) *appError {
+        plugin, id, errorInfo := s.getPlugin(r)
+        if  errorInfo != nil {
+            return errorInfo
+        }
+        r.ParseMultipartForm(4096)
+        file,_, _ := r.FormFile("channel")
+        buf := bytes.NewBuffer(nil)
+        _,err := io.Copy(buf, file);
+        if err!= nil {
+            return &appError{ "The \"channel\" field is required ", http.StatusBadRequest, nil}
+        }
+        user := r.FormValue("username")
+        if  user == "" {
+            return &appError{ "The \"username\" field is required ", http.StatusBadRequest, nil}
+        }
+        pass := r.FormValue("password")
+        if  user == "" {
+            return &appError{ "The \"password\" field is required ", http.StatusBadRequest, nil}
+        }
+        res, err := plugin.Load(bytes.NewReader(buf.Bytes()), user, pass);
+        if err !=nil || res == false {
+            status := responseStatuses["UnknownError"]
+            return &appError{ err.Error(), http.StatusInternalServerError, &status}
+        }
+        return prepareResponse(w, &SessionResponse{
+            Id: id,
+            Status: 0,
+            Value: nil,
+        })
     }
  }
 
@@ -358,6 +400,35 @@ func (s *Server) GetElementHandler() appHandler {
             return  &appError{ "The \"channelId\" is required", http.StatusBadRequest, nil}
         }
         res, err := client.LaunchChannel(t.ChannelId, t.ContentId, t.ContentType)
+        if err !=nil || res == false {
+            status := responseStatuses["UnknownError"]
+            return &appError{ err.Error(), http.StatusInternalServerError, &status}
+        }
+        response := &SessionResponse {
+            Id: id,
+            Status: responseStatuses["Success"],
+            Value: nil,
+        }
+        return prepareResponse(w, response)
+    }
+ }
+
+ func (s *Server) GetInputHandler() appHandler { 
+    return func(w http.ResponseWriter, r *http.Request) *appError {
+        client, id, errorInfo := s.getClient(r)
+        if  errorInfo != nil {
+            return errorInfo
+        }
+        b, err := ioutil.ReadAll(r.Body)
+        var t ChannelRequest
+        err = json.Unmarshal(b, &t)
+        if err != nil {
+            return &appError{ err.Error(), http.StatusBadRequest, nil}
+        }
+        if len(t.ChannelId) == 0 {
+            return  &appError{ "The \"channelId\" is required", http.StatusBadRequest, nil}
+        }
+        res, err := client.InputChannel(t.ChannelId, t.ContentId, t.ContentType)
         if err !=nil || res == false {
             status := responseStatuses["UnknownError"]
             return &appError{ err.Error(), http.StatusInternalServerError, &status}
@@ -607,7 +678,7 @@ func (s *Server) GetSourceHandler() appHandler {
         return prepareResponse(w, response)
     }
  }
-
+ 
  func (s *Server) notFound() appHandler {
 	return func(w http.ResponseWriter, r *http.Request) *appError {
         return &appError{"Unimplemented Command", http.StatusNotImplemented, nil}
@@ -626,6 +697,18 @@ func (s *Server) GetSourceHandler() appHandler {
     }
     client := session.client
     return client, id, nil
+ }
+
+ func (s *Server) getPlugin(r *http.Request) (*ecp.PluginClient, string, *appError) {
+    vars := mux.Vars(r)
+    id := vars["sessionId"]
+    session := s.sessions[id]
+    if session == nil {
+        status := responseStatuses["NoSuchDriver"]
+        return nil, id, &appError{ "Invalid sessionId", http.StatusInternalServerError, &status}
+    }
+    plugin := session.plugin
+    return plugin, id, nil
  }
 
  func prepareResponse(w http.ResponseWriter, response interface{}) *appError {

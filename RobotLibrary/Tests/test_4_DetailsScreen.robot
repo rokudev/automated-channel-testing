@@ -15,15 +15,12 @@
 ########################################################################
 *** Settings ***
 Documentation  Test 2
+Variables  ./../Library/variables.py 
 Library  ./../Library/RobotLibrary.py  ${ip_address}  ${timeout}  ${pressDelay}  ${server_path}
 Library  Collections
 
 
 *** Variables ***
-${ip_address}  192.168.1.94
-${server_path}  D:/projects/go/webDriver/src/main.exe
-${timeout}  20000
-${pressDelay}  2000
 ${channel_code}  dev
 &{SeriesDetails}=  using=text  value=No Content to play
 @{SeriesDetailsArray}=  &{SeriesDetails}
@@ -41,7 +38,7 @@ Check if channel exist on the device
     Verify is channel exist    ${apps}  ${channel_code}
 
 Verify is channel launched
-    Launch the channel  ${channel_code}
+    Side load  ../channels/4_DetailsScreen.zip   rokudev   aaaa
     Verify is channel loaded    ${channel_code}    
 
 Verify is initial screen loaded

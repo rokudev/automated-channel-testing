@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            body {
+                font-family: Arial;
+            }
+
+            .tab {
+                overflow: hidden;
+                border: 1px solid #ccc;
+                background-color: #f1f1f1;
+            }
+
+            .tab button {
+                background-color: inherit;
+                float: left;
+                border: none;
+                outline: none;
+                cursor: pointer;
+                padding: 14px 16px;
+                transition: 0.3s;
+                font-size: 17px;
+            }
+
+            .tab button:hover {
+                background-color: #ddd;
+            }
+
+            .tab button.active {
+                background-color: #ccc;
+            }
+
+            .tabcontent {
+                display: none;
+                padding: 6px 12px;
+                border: 1px solid #ccc;
+                border-top: none;
+            }
+
+            .log_fr {
+                width: 98%;
+                height: 75vh;
+                border: none;
+            }
+        </style>
+    </head>
+    <body>
+        <h2>$title</h2>
+
+        <div class="tab" id="device_tab">
+        </div>
+
+        <script>
+            function openDevice(event, deviceName) {
+                var i, tabcontent, tablinks;
+                tabcontent = document.getElementsByClassName("tabcontent");
+                for (i = 0; i < tabcontent.length; i++) {
+                    tabcontent[i].style.display = "none";
+                }
+                tablinks = document.getElementsByClassName("tablinks");
+                for (i = 0; i < tablinks.length; i++) {
+                    tablinks[i].className = tablinks[i].className.replace(" active", "");
+                }
+                document.getElementById(deviceName).style.display = "block";
+                event.currentTarget.className += " active";
+            }
+
+            window.addEventListener('load', (event) => {
+                var content = $content;
+                var tab = document.getElementById("device_tab");
+                content.forEach(el => addTab(tab, el))
+                var el = document.getElementsByClassName("tablinks")[0];
+                el.click();
+            });
+
+            function addTab(tabMenu, el) {
+                var newTab = createTab(el.name);
+                tabMenu.appendChild(newTab);
+                var tabContent = createTabContent(el.name, el.src);
+                insertAfter(tabContent, tabMenu);
+            }
+
+            function createTab(name) {
+                var newTab = document.createElement("button");
+                newTab.className = "tablinks";
+                newTab.innerHTML = name;
+                newTab.addEventListener("click", (event) => {
+                    openDevice(event, name);
+                })
+                return newTab;
+            }
+
+            function createTabContent(name, src) {
+                var newTabContent = document.createElement("iframe");
+                newTabContent.className = "log_fr tabcontent";
+                newTabContent.id = name;
+                newTabContent.src = src;
+                return newTabContent;
+            }
+
+            function insertAfter(el, referenceNode) {
+                referenceNode.parentNode.insertBefore(el, referenceNode.nextSibling);
+            }
+        </script>
+    </body>
+</html> 

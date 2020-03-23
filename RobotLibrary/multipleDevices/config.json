@@ -1,0 +1,17 @@
+{
+    "devices": {
+        "Austin": {
+            "ip_address": "192.168.1.64",
+            "timeout":  20000,
+            "pressDelay": 2000
+        },
+        "Tyler": {
+            "ip_address": "192.168.1.16",
+            "timeout":  25000,
+            "pressDelay": 1000
+        }
+    },
+    "server_path": "D:/projects/go/webDriver/src/main.exe",
+    "test": "multipleDevices/test_3_Grid_multi_device.robot",
+    "outputdir": "Results"
+}

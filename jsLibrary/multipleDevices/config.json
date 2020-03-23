@@ -1,0 +1,17 @@
+{
+    "devices": {
+        "Austin": {
+            "ip_address": "192.168.1.64",
+            "timeout":  20000,
+            "pressDelay": 2000
+        },
+        "Austin2": {
+            "ip_address": "192.168.1.195",
+            "timeout":  20000,
+            "pressDelay": 2000
+        }
+    },
+    "server_path": "D:/projects/go/webDriver/src/main.exe",
+    "test": "D:/projects/go/webDriver/jsLibrary/multipleDevices/multiple_devices_test_basics.js",
+    "outputdir": "Results"
+}

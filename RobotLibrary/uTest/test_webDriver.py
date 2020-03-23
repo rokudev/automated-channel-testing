@@ -42,7 +42,7 @@ class BasicTests(unittest.TestCase):
         with patch('Library.webDriver.requests.post') as mock_post:
             mock_post.return_value.status_code = 200
             mock_post.return_value.text = json.dumps(respWithEmptyValue)
-            response = self._webDriver.send_launch_channel("dev")
+            response = self._webDriver.send_launch_channel("dev", "", "")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json.loads(response.text), respWithEmptyValue)
 
@@ -141,4 +141,24 @@ class BasicTests(unittest.TestCase):
             response = self._webDriver.get_screen_source()
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json.loads(response.text), respWithSource)
+
+    def test_send_input_data(self):
+        with patch('Library.webDriver.requests.post') as mock_post:
+            mock_post.return_value.status_code = 200
+            mock_post.return_value.text = json.dumps(respWithEmptyValue)
+            response = self._webDriver.send_input_data("dev", "12", "movie")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.text), respWithEmptyValue)
+
+    def test_side_load(self):
+        with patch('Library.webDriver.requests.post') as mock_post:
+            mock_post.return_value.status_code = 200
+            mock_post.return_value.text = json.dumps(respWithEmptyValue)
+            multipart_form_data = {
+                'username': (None, "user"),
+                'password': (None, "pass")
+            }
+            response = self._webDriver.side_load(multipart_form_data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.text), respWithEmptyValue)
 

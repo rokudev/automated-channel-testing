@@ -45,8 +45,10 @@ func GetMockedClient(resp *string) *EcpClient {
 	cli.HttpClient = httpClient
 
 	contentsClient := EcpClient{
-		BaseURL:        base,
-		HttpClient:     cli,
+		BaseClient: &BaseClient{
+			BaseURL:        base,
+			HttpClient:     cli,
+		},
 	}
 
 	return &contentsClient

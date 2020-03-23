@@ -69,7 +69,6 @@ class WebDriver:
     def verify_is_screen_loaded(self, data: object, invoke_error = True, retries = 10):
         while retries > 0:
             ui_layout_response = self._get_ui_element(data)
-            print(ui_layout_response.text)
             if ui_layout_response.status_code != 200:
                 retries -= 1
                 sleep(1)

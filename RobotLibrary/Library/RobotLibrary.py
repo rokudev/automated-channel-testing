@@ -21,6 +21,7 @@ from time import sleep
 from robot.api import logger
 import subprocess
 import json
+from datetime import datetime, timedelta
 
 class RobotLibrary:
 
@@ -33,16 +34,36 @@ class RobotLibrary:
             self._process = subprocess.Popen(path)
         self.ROBOT_LIBRARY_LISTENER = self
         self._client = WebDriver(ip, timeout, pressDelay)
+        self.markTimer()
        
     def close(self):
         self._client.quiet()
         if self._process != None:
             self._process.kill()
+    
+    @keyword("Mark timer")
+    def markTimer(self):
+        self._startTime = datetime.now()
+    
+    @keyword("Get timer")
+    def getTimer(self):
+        currentTime = datetime.now()
+        delta = currentTime - self._startTime
+        return int(delta / timedelta(milliseconds=1))
+
+    @keyword("Side load")
+    def sideLoad(self, path, user, password):
+        multipart_form_data = {
+            'channel': ('channel.zip', open(path, 'rb')),
+            'username': (None, user),
+            'password': (None, password)
+        }
+        response = self._client.side_load(multipart_form_data)
+        self._checkResponse(response)
 
     @keyword("Launch the channel")
-    def launchTheChannel(self, channel_code):
-        launch_response = self._client.send_launch_channel(channel_code)
-        print(launch_response)
+    def launchTheChannel(self, channel_code, contentId = "", mediaType = ""):
+        launch_response = self._client.send_launch_channel(channel_code, contentId, mediaType)
         self._checkResponse(launch_response)
     
     @keyword("Get apps")
@@ -87,7 +108,7 @@ class RobotLibrary:
 
     
     @keyword("Send keys")
-    def send_button_sequence(self, sequence, delay = 2):
+    def sendButtonSequence(self, sequence, delay = 2):
         sleep(delay)
         key_press_response = self._client.send_sequence(sequence)
         self._checkResponse(key_press_response)
@@ -107,8 +128,6 @@ class RobotLibrary:
         ui_layout_response = self._client.get_ui_elements(data)
         self._checkResponse(ui_layout_response)
         res = json.loads(ui_layout_response.text)
-        print(delay)
-        print(len(res['value']))
         return res['value']
 
     @keyword("Get focused element")
@@ -136,8 +155,7 @@ class RobotLibrary:
         app_response = self._client.get_current_app()
         self._checkResponse(app_response)
         res = json.loads(app_response.text)
-        channel = res['value']
-        return channel
+        return res['value']
 
     @keyword("Get device info")
     def getDeviceInfo(self):
@@ -184,6 +202,12 @@ class RobotLibrary:
             if attrObj['Name']["Local"] == attr:
                 return  attrObj['Value']
         raise Exception("Can't find attribute")
+    
+    @keyword("Input deep linking data")
+    def inputDeepLinkingData(self, channelId, contentId, mediaType):
+        launch_response = self._client.send_input_data(channelId, contentId, mediaType)
+        self._checkResponse(launch_response)
+            
 
     def _checkResponse(self, response):
         if response.status_code == 400:

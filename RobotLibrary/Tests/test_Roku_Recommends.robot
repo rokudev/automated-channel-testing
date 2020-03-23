@@ -15,15 +15,11 @@
 ########################################################################
 *** Settings ***
 Documentation  Test 2
+Variables  ./../Library/variables.py 
 Library  ./../Library/RobotLibrary.py  ${ip_address}  ${timeout}  ${pressDelay}  ${server_path}
 Library  Collections
 
-
 *** Variables ***
-${ip_address}  192.168.1.94
-${server_path}  D:/projects/go/webDriver/src/main.exe
-${timeout}  20000
-${pressDelay}  2000
 ${channel_code}  dev
 &{DATA2}=  using=text  value=No Content to play
 @{Params2}=  &{DATA2}
@@ -37,7 +33,7 @@ ${channel_code}  dev
 
 *** Test Cases ***
 Verify is channel launched
-    Launch the channel  ${channel_code}
+    Side load  ../channels/Roku_Recommends.zip   rokudev   aaaa
     Verify is channel loaded    ${channel_code}    
 
 Verify is initial screen loaded

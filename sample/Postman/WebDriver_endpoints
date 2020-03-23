@@ -1,0 +1,698 @@
+{
+	"info": {
+		"_postman_id": "e5eada1d-e5cc-4c05-9004-785381ba4e8d",
+		"name": "WebDriver",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "create session",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "892f348f-169a-4a68-8968-5e41d9080297",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "8bcd93bb-9cfc-4ca4-ae63-49c721f5fe97",
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"pm.globals.set(\"sessionId\", jsonData.sessionId);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"ip\": \"192.168.1.64\"\n}"
+				},
+				"url": {
+					"raw": "localhost:9000/v1/session",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"v1",
+						"session"
+					]
+				},
+				"description": "create session"
+			},
+			"response": []
+		},
+		{
+			"name": "get list of apps on device",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:9000/v1/session/{{sessionId}}/apps",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"v1",
+						"session",
+						"{{sessionId}}",
+						"apps"
+					]
+				},
+				"description": "get list of apps from device"
+			},
+			"response": []
+		},
+		{
+			"name": "get info about current channel",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:9000/v1/session/{{sessionId}}/current_app",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"v1",
+						"session",
+						"{{sessionId}}",
+						"current_app"
+					]
+				},
+				"description": "get info about current app"
+			},
+			"response": []
+		},
+		{
+			"name": "open installation screen for specified channel",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"channelId\": \"14295\"\n}"
+				},
+				"url": {
+					"raw": "localhost:9000/v1/session/{{sessionId}}/install",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"v1",
+						"session",
+						"{{sessionId}}",
+						"install"
+					]
+				},
+				"description": "install channel"
+			},
+			"response": []
+		},
+		{
+			"name": "launch the channel",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"channelId\": \"dev\"\n}"
+				},
+				"url": {
+					"raw": "localhost:9000/v1/session/{{sessionId}}/launch",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"v1",
+						"session",
+						"{{sessionId}}",
+						"launch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "send keypress",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"button\": \"down\"\n}"
+				},
+				"url": {
+					"raw": "localhost:9000/v1/session/{{sessionId}}/press",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"v1",
+						"session",
+						"{{sessionId}}",
+						"press"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "send sequence of keypresses",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"button_sequence\": [\"up\", \"down\"]\n}"
+				},
+				"url": {
+					"raw": "localhost:9000/v1/session/{{sessionId}}/press",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"v1",
+						"session",
+						"{{sessionId}}",
+						"press"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get elements by tag",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"elementData\" :[{\n\t\t\"using\": \"tag\",\n\t\t\"value\": \"Poster\"\n\t}]\n}"
+				},
+				"url": {
+					"raw": "localhost:9000/v1/session/{{sessionId}}/elements",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"v1",
+						"session",
+						"{{sessionId}}",
+						"elements"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get element by \"text\" locator",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"elementData\" :[{\n\t\t\"using\": \"text\",\n\t\t\"value\": \"Row\"\n\t}]\n}"
+				},
+				"url": {
+					"raw": "localhost:9000/v1/session/{{sessionId}}/element",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"v1",
+						"session",
+						"{{sessionId}}",
+						"element"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get element by \"text\" locator and \"parentData\"",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"elementData\" :[{\n\t\t\"using\": \"text\",\n\t\t\"value\": \"Row\"\n\t}],\n\t\"parentData\" :[{\n\t\t\"using\": \"tag\",\n\t\t\"value\": \"GridView\"\n\t}]\n}"
+				},
+				"url": {
+					"raw": "localhost:9000/v1/session/{{sessionId}}/element",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"v1",
+						"session",
+						"{{sessionId}}",
+						"element"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get element by \"attribute\" and \"tag\" locators",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"elementData\":[{\n\t\t\"using\": \"tag\",\n\t\t\"value\": \"Poster\"\n\t},{\n\t\t\"using\": \"attr\",\n\t\t\"attribute\": \"index\",\n\t\t\"value\": \"3\"\n\t}]\n}"
+				},
+				"url": {
+					"raw": "localhost:9000/v1/session/{{sessionId}}/element",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"v1",
+						"session",
+						"{{sessionId}}",
+						"element"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete session",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "57f80d08-dc29-46c3-bca8-aa5ba43f16a0",
+						"exec": [
+							"pm.globals.unset(\"sessionId\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:9000/v1/session/{{sessionId}}",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"v1",
+						"session",
+						"{{sessionId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get focused element",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:9000/v1/session/{{sessionId}}/element/active",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"v1",
+						"session",
+						"{{sessionId}}",
+						"element",
+						"active"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deep linking",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"channelId\": \"dev\",\n    \"contentId\": \"12\",\n    \"contentType\": \"movie\"\n}"
+				},
+				"url": {
+					"raw": "localhost:9000/v1/session/{{sessionId}}/launch",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"v1",
+						"session",
+						"{{sessionId}}",
+						"launch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deep linking input",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"channelId\": \"dev\",\n    \"contentId\": \"12\",\n    \"contentType\": \"movie\"\n}"
+				},
+				"url": {
+					"raw": "localhost:9000/v1/session/{{sessionId}}/input",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"v1",
+						"session",
+						"{{sessionId}}",
+						"input"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "webDriver status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:9000/v1/status",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"v1",
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get info about each session",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:9000/v1/sessions",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"v1",
+						"sessions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get info about session by sessionId",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:9000/v1/session/{{sessionId}}",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"v1",
+						"session",
+						"{{sessionId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get current screen source",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:9000/v1/session/{{sessionId}}/source",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"v1",
+						"session",
+						"{{sessionId}}",
+						"source"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "set implicit_timeout/pressDelay",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"type\": \"pressDelay\",\n\t\"value\": 1000\n}"
+				},
+				"url": {
+					"raw": "localhost:9000/v1/session/{{sessionId}}/timeouts",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"v1",
+						"session",
+						"{{sessionId}}",
+						"timeouts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "set implicit timeout",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"value\": 21000\n}"
+				},
+				"url": {
+					"raw": "localhost:9000/v1/session/{{sessionId}}/timeouts/implicit_wait",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"v1",
+						"session",
+						"{{sessionId}}",
+						"timeouts",
+						"implicit_wait"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "set key press delay for sequence of keypresses",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"value\": 1000\n}"
+				},
+				"url": {
+					"raw": "localhost:9000/v1/session/{{sessionId}}/timeouts/press_wait",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"v1",
+						"session",
+						"{{sessionId}}",
+						"timeouts",
+						"press_wait"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

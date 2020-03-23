@@ -32,6 +32,7 @@ type Server struct {
 
 type SessionInfo struct {
 	client *ecp.EcpClient
+	plugin *ecp.PluginClient
 	capability *Capability
 	pressDelay time.Duration
 }

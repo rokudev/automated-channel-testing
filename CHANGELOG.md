@@ -5,8 +5,21 @@
 
 ### Features
 
- * Initial Release.
+ * Initial Release
  * Initial version of a Roku WebDriver.
- * Support for key press simulation.
- * UI testing capabilities.
- * Robot Framework support.
+ * Key press simulation.
+ * Grab UI elements.
+ * Current app metadata.
+
+## v.2.0.0
+
+### Features
+
+ * JavaScript client.
+ * Channel side loading.
+ * Input deep linking.
+ * Timers.
+ * Multiple device support for Robot and JavaScript libraries.
+ 
+
+ 

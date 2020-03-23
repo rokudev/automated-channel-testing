@@ -1,0 +1,12 @@
+{
+  "scripts": {
+    "test": "mocha \"tests/test_basic.js\""
+  },
+  "dependencies": {
+    "axios": "0.19.1",
+    "chai": "4.2.0",
+    "form-data": "3.0.0",
+    "mocha": "7.0.1",
+    "nock": "12.0.1"
+  }
+}

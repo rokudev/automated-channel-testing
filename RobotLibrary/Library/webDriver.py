@@ -26,14 +26,23 @@ class WebDriver:
         res = json.loads(response.text)
         self._session_id = res['sessionId']
 
-    def send_launch_channel(self, channel_code: str):
-        data = {'channelId' : channel_code}
+    def send_launch_channel(self, channel_code: str, contentID, mediaType):
+        data = {'channelId' : channel_code, 'contentId': contentID, 'contentType': mediaType}
         request_url = self._build_request_url(f"/{self._session_id}/launch")
+        return self._post(request_url, data)
+    
+    def send_input_data(self, channelId, contentID, mediaType):
+        data = {'channelId': channelId, 'contentId': contentID, 'contentType': mediaType}
+        request_url = self._build_request_url(f"/{self._session_id}/input")
         return self._post(request_url, data)
 
     def get_device_info(self):
         request_url = self._build_request_url(f"/{self._session_id}")
         return self._get(request_url)
+
+    def side_load(self, form):
+        request_url = self._build_request_url(f"/{self._session_id}/load")
+        return requests.post(request_url, files=form)
     
     def get_player_info(self):
         request_url = self._build_request_url(f"/{self._session_id}/player")
