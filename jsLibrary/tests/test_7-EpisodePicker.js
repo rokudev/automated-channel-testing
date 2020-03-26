@@ -52,7 +52,7 @@ describe('test_7-EpisodePicker', () => {
         expect(res).equal(true);
     });
 
-    it('Verify is Categort list loaded', async function() { 
+    it('Verify is Category list loaded', async function() {
         this.timeout(50000);
         await library.sendKey('select', 3);
         const res = await library.verifyIsScreenLoaded({'elementData': [{'using': 'tag', 'value': 'CategoryListView'}]});

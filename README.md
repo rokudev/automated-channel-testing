@@ -160,7 +160,7 @@ To install the [Roku Robot Framework Library](https://developer.roku.com/docs/de
 
 To install the [Roku JavaScript  Library](https://developer.roku.com/docs/developer-program/dev-tools/automated-channel-testing/javascript-library.md) and test it on one or more devices, follow these steps: 
 
-1. Download and install the [node.js](https://nodejs.org/en/) JavaScript runtime envrionment.
+1. Download and install the [node.js](https://nodejs.org/en/) JavaScript runtime environment.
 
 2. Download and install the [Yarn](https://classic.yarnpkg.com/en/docs/install) JavaScript package manager.
 
@@ -168,7 +168,7 @@ To install the [Roku JavaScript  Library](https://developer.roku.com/docs/develo
 
         yarn install
 
-4. To use the [Mocha](https://mochajs.org/) JavaScript test framework and run tests on multiple devcies, globally install Mocha and [Mochawesome](https://www.npmjs.com/package/mochawesome): 
+4. To use the [Mocha](https://mochajs.org/) JavaScript test framework and run tests on multiple devices, globally install Mocha and [Mochawesome](https://www.npmjs.com/package/mochawesome): 
 
         yarn global add mocha
         yarn global add mochawesome

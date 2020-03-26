@@ -44,8 +44,8 @@ function startTest(cmds, config) {
     const executeCmd = isWin ? 'mocha.cmd' : 'mocha';
     cmds.forEach(({options, name}) => {
         let child = spawn(executeCmd, [`${test}`,'--reporter', 'mochawesome', '--reporter-options', `reportDir=${outputdir},reportFilename=${name}`, options]);
-        child.on('error', (messasge) => {
-            console.log(`${name} error: ${messasge}`);
+        child.on('error', (message) => {
+            console.log(`${name} error: ${message}`);
         });
         child.stdout.on('data', (data) => {
             console.log(`${name} stdout:\n${data}`);
