@@ -311,21 +311,15 @@ func (s *Server) GetElementHandler() appHandler {
         result := node.Nodes
         var searchError *appError
         if t.ParentData != nil {
-            for _, element := range t.ParentData {
-                result, searchError = searchMultipleResults(result, element)
-                if searchError != nil {
-                    return searchError
-                }
-            }
-        }
-
-        for _, element := range t.ElementData {
-            result, searchError = searchMultipleResults(result, element)
+            result, searchError = getNodesByLocators(t.ParentData, result)
             if searchError != nil {
                 return searchError
             }
         }
-
+        result, searchError = getNodesByLocators(t.ElementData, result)
+        if searchError != nil {
+            return searchError
+        }
         if result == nil {
             status := responseStatuses["NoSuchElement"]
             return &appError{ "An element could not be located on the screen using the given search parameters", http.StatusInternalServerError, &status}
@@ -340,15 +334,31 @@ func (s *Server) GetElementHandler() appHandler {
     }
  }
 
- func searchMultipleResults(nodes []ecp.Node, t Element) ( []ecp.Node, *appError ){
+ func getNodesByLocators(locators []Element, nodes []ecp.Node) ([]ecp.Node, *appError) {
+    result := nodes
+    var searchError *appError
+    for i, element := range locators {
+        checkChildNodes := false
+        if i == 0 {
+            checkChildNodes = true
+        }
+        result, searchError = searchMultipleResults(result, element, checkChildNodes)
+        if searchError != nil {
+            return nil, searchError
+        }
+    }
+    return result, nil
+ }
+
+ func searchMultipleResults(nodes []ecp.Node, t Element, checkChildNodes bool) ( []ecp.Node, *appError ){
     var result []ecp.Node
     switch t.Using {
     case "tag":
-        result = findMultipleNodes(nodes, t.Value)
+        result = findMultipleNodes(nodes, t.Value, checkChildNodes)
     case "text":
-        result = findMultipleNodesByText(nodes, t.Value, "text")
+        result = findMultipleNodesByText(nodes, t.Value, "text", checkChildNodes)
     case "attr":
-        result = findMultipleNodesByText(nodes, t.Value, t.Attribute)
+        result = findMultipleNodesByText(nodes, t.Value, t.Attribute, checkChildNodes)
     default:
         return  nil, &appError{ "Invalid \"using\" value", http.StatusBadRequest, nil}
     }
@@ -465,20 +475,16 @@ func (s *Server) GetElementsHandler() appHandler {
         result := node.Nodes
         var searchError *appError
         if t.ParentData != nil {
-            for _, element := range t.ParentData {
-                result, searchError = searchMultipleResults(result, element)
-                if searchError != nil {
-                    return searchError
-                }
-            }
-        }
-
-        for _, element := range t.ElementData {
-            result, searchError = searchMultipleResults(result, element)
+            result, searchError = getNodesByLocators(t.ParentData, result)
             if searchError != nil {
                 return searchError
             }
         }
+        result, searchError = getNodesByLocators(t.ElementData, result)
+        if searchError != nil {
+            return searchError
+        }
+
         if result == nil {
             status := responseStatuses["NoSuchElement"]
             return &appError{ "An element could not be located on the screen using the given search parameters", http.StatusInternalServerError, &status}
@@ -504,15 +510,7 @@ func (s *Server) GetActiveElementHandler() appHandler {
             status := responseStatuses["NoSuchDriver"]
             return &appError{ err.Error(), http.StatusInternalServerError, &status}
         }
-        element := Element{
-            Using: "attr",
-            Value: "true",
-            Attribute: "focused",
-        }
-        result, searchError := searchMultipleResults(node.Nodes, element)
-        if searchError != nil {
-            return searchError
-        }
+        result := findFocusedNode(node.Nodes, false)
         
         if result == nil {
             status := responseStatuses["NoSuchElement"]
@@ -521,7 +519,7 @@ func (s *Server) GetActiveElementHandler() appHandler {
         response := &SessionResponse{
             Id: id,
             Status: 0,
-            Value: result[len(result) - 1],
+            Value: result,
         }
         return prepareResponse(w, response)
     }
@@ -722,38 +720,104 @@ func (s *Server) GetSourceHandler() appHandler {
     return nil
  }
 
- func findMultipleNodes(nodes []ecp.Node, value string) []ecp.Node {
-    var nodeArray []ecp.Node
+ func findFocusedNode(nodes []ecp.Node, forceHandleFocusItem bool) *ecp.Node {
     for _, node := range nodes {
-        if node.XMLName.Local == value {
-            nodeArray = append(nodeArray, node) 
-        } 
-        if node.Nodes != nil {
-            res := findMultipleNodes(node.Nodes, value)
-            if res != nil {
-                nodeArray = append(nodeArray, res...)
+        isVisible := strings.ToLower(getAttributeValue(node, "visible"))
+        isFocused := strings.ToLower(getAttributeValue(node, "focused"))
+        if (isVisible == "" || isVisible == "true") && isFocused != "false" {
+            focusItem := getAttributeValue(node, "focusItem")
+            if focusItem != "" && (isFocused == "true" || forceHandleFocusItem) {
+                result := handleFocusItem(node, focusItem)
+                if result != nil {
+                    return result
+                }
+            } else if node.Nodes != nil && focusItem == "" {
+                childNode := findFocusedNode(node.Nodes, forceHandleFocusItem)
+                if childNode != nil {
+                    return childNode
+                } else if isFocused == "true" {
+                    return &node
+                }
+            } else if isFocused == "true" {
+                return &node
             }
-        } 
+        }
+    }
+    return nil
+ }
+
+ func handleFocusItem(node ecp.Node, focusItem string) *ecp.Node {
+    index, err := strconv.Atoi(focusItem)
+    if err != nil {
+        return nil
+    }
+    if (len(node.Nodes) <= index) || index < 0 {
+        return nil
+    }
+    childNode := node.Nodes[index]
+    if childNode.Nodes != nil {
+        childFocusedNode := findFocusedNode(childNode.Nodes, true)
+        if childFocusedNode != nil {
+            return childFocusedNode
+        } else {
+            return &childNode
+        }
+    } else {
+        return &childNode
+    }
+ }
+
+ func getAttributeValue(node ecp.Node, attribute string) string {
+    for _, attrObj := range node.Attrs {
+        if attrObj.Name.Local == attribute {
+            return attrObj.Value
+        }
+    }
+    return ""
+ }
+
+ func findMultipleNodes(nodes []ecp.Node, value string, checkChildNodes bool) []ecp.Node {
+    var nodeArray []ecp.Node
+    value = strings.ToLower(value)
+    for _, node := range nodes {
+        isVisible := strings.ToLower(getAttributeValue(node, "visible"))
+        if (isVisible == "" || isVisible == "true") {
+            if strings.ToLower(node.XMLName.Local) == value {
+                nodeArray = append(nodeArray, node) 
+            }
+            if checkChildNodes && node.Nodes != nil {
+                res := findMultipleNodes(node.Nodes, value, checkChildNodes)
+                if res != nil {
+                    nodeArray = append(nodeArray, res...)
+                }
+            }
+        }
     }
     return nodeArray
  }
 
- func findMultipleNodesByText(nodes []ecp.Node, value string, attribute string) []ecp.Node  {
+ func findMultipleNodesByText(nodes []ecp.Node, value string, attribute string, checkChildNodes bool) []ecp.Node  {
     var nodeArray []ecp.Node
+    value = strings.ToLower(value)
+    attribute = strings.ToLower(attribute)
     for _, node := range nodes {
-        if node.Attrs != nil {
-            for _, attr := range node.Attrs {
-                if attr.Name.Local == attribute && ((attribute == "text" && strings.Contains(attr.Value, value) == true) || (attribute != "text" && attr.Value == value)) {
-                    nodeArray = append(nodeArray, node)
+        isVisible := strings.ToLower(getAttributeValue(node, "visible"))
+        if (isVisible == "" || isVisible == "true") {
+            if node.Attrs != nil {
+                for _, attr := range node.Attrs {
+                    attrValue := strings.ToLower(attr.Value)
+                    if strings.ToLower(attr.Name.Local) == attribute && ((attribute == "text" && strings.Contains(attrValue, value) == true) || (attribute != "text" && attrValue == value)) {
+                        nodeArray = append(nodeArray, node)
+                    }
+                }
+            }
+            if checkChildNodes && node.Nodes != nil {
+                res := findMultipleNodesByText(node.Nodes, value, attribute, checkChildNodes)
+                if res != nil {
+                    nodeArray = append(nodeArray, res...)
                 }
             }
         }
-        if node.Nodes != nil {
-            res := findMultipleNodesByText(node.Nodes, value, attribute)
-            if res != nil {
-                nodeArray = append(nodeArray, res...)
-            }
-        } 
     }
     return nodeArray
  }
