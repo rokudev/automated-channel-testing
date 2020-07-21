@@ -17,6 +17,7 @@ Side load
 
 Verify is channel launched
     Launch the channel   ${channel_code}  ${content_id}  ${mediaType}
+    Mark timer
     Verify is channel loaded  ${channel_code}
 
 Verify is playback started (Deep linking)
@@ -24,7 +25,7 @@ Verify is playback started (Deep linking)
 
 Verify is playback started quickly
      ${time_dl}=  Get timer
-     Run Keyword If  ${time_dl} > 10000  Fail
+     Run Keyword If  ${time_dl} > 12000  Fail
 
 Verify is playback started (input)
     Send key  Stop
