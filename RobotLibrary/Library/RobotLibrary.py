@@ -33,6 +33,11 @@ class RobotLibrary:
         if len(path) > 0:
             self._process = subprocess.Popen(path)
         self.ROBOT_LIBRARY_LISTENER = self
+        self.locatorHandlers = {
+            "attr": self._checkAttribute,
+            "tag": self._checkTag,
+            "text": self._checkText
+        }
         self._client = WebDriver(ip, timeout, pressDelay)
         self.markTimer()
        
@@ -207,7 +212,55 @@ class RobotLibrary:
     def inputDeepLinkingData(self, channelId, contentId, mediaType):
         launch_response = self._client.send_input_data(channelId, contentId, mediaType)
         self._checkResponse(launch_response)
-            
+
+    @keyword("Get child nodes")
+    def getChildNodes(self, parentNode, locators):
+        childNodes = parentNode.Nodes
+        result = []
+        if childNodes == None:
+            return result
+        if locators == None:
+            return result
+        for node in childNodes:
+            if self._isElementMatchLocators(node, locators) == True:
+                result.append(node)
+            result.extend(self.getChildNodes(node, locators))
+        return result
+        
+    def _isElementMatchLocators(self, node, locators):
+        for locator in locators:
+            if hasattr(locator, 'using') == False:
+                return False
+            handler = self.locatorHandlers[locator.using]
+            if handler == None:
+                return False
+            isMatch = handler(node, locator)
+            if isMatch == False:
+                return False
+        return True
+    
+    def _checkAttribute(self, node, locator):
+        if hasattr(node, 'Attrs') == False or hasattr(locator, 'value') == False or hasattr(locator, 'attribute') == False:
+            return False
+        for attr in node.Attrs:
+            matchName = attr.Name.Local.lower() == locator.attribute.lower()
+            matchValue = attr.Value.lower() == locator.value.lower()
+            if matchName and matchValue:
+                return True
+        return False
+    
+    def _checkTag(self, node, locator):
+        return node.XMLName.Local.lower() == locator.value.lower()
+
+    def _checkText(self, node, locator):
+        if hasattr(node, 'Attrs') == False or hasattr(locator, 'value') == False:
+            return False
+        for attr in node.Attrs:
+            matchName = attr.Name.Local.lower() == "text"
+            matchValue = attr.Value.lower() == locator.value.lower()
+            if matchName and matchValue:
+                return True
+        return False
 
     def _checkResponse(self, response):
         if response.status_code == 400:
@@ -219,16 +272,3 @@ class RobotLibrary:
     def _getMsFromString(self, str):
         data = str.split(' ')
         return data[0]
-    
-    
-    
-    
-     
-
-
-    
-        
-    
-    
-
-    
