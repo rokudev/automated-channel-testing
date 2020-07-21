@@ -34,7 +34,15 @@ ${channel_code}  dev
 &{CategoryData}=  using=tag  value=CategoryListView
 @{CategoryArray}=  &{CategoryData}
 &{CategoryParams}=  elementData=${CategoryArray}
-@{GridKeys}=  Up  Select
+&{tagData}=  using=tag  value=RenderableNode
+&{attrData}=  using=attr  attribute=focused  value=true
+&{season1Data}=   using=attr  attribute=index  value=0 
+&{season2Data}=   using=attr  attribute=index  value=1 
+@{Season1Array}=  &{tagData}  &{attrData}  &{season1Data}
+&{Season1Params}=  elementData=${Season1Array}
+@{Season2Array}=  &{tagData}  &{attrData}  &{season2Data}
+&{Season2Params}=  elementData=${Season2Array}
+@{KEYS}=  Down  Down  Down  Down  Down  Down
 
 *** Test Cases ***
 Verify is channel launched
@@ -44,40 +52,17 @@ Verify is channel launched
 Verify is initial screen loaded
     Verify is screen loaded    ${GridParams}
 
-Verify focused element on grid screen
-    Send key  Down  4
-    &{focusedEl}=  get focusedElement
-    @{Nodes}=  Get From Dictionary	${focusedEl}  Nodes 
-    ${uri}=  Get attribute  @{Nodes}[${1}]  uri
-    Run keyword if  '${uri}'!='https://blog.roku.com/developer/files/2016/10/twitch-poster-artwork.png'  Fail
-
 Verify is details screen loaded
-    Send keys  ${GridKeys}  4
+    Send key  Select  4
     Verify is screen loaded    ${DetailsParams}
-
-Verify focused element on details screen
-    &{focusedEl}=  get focusedElement
-    @{Nodes}=  Get From Dictionary	${focusedEl}  Nodes 
-    @{Nodes}=  Get From Dictionary  @{Nodes}[${0}]  Nodes
-    ${text}=  Get Attribute  @{Nodes}[${2}]  text
-    Run keyword if  '${text}'!='Episodes'  Fail
 
 Verify is Categort list started
     Send key  Select  4
     Verify is screen loaded    ${CategoryParams}
 
-Verify focused element on episodes screen (episodes list)
-    Send key  Down
-    &{focusedEl}=  get focusedElement
-    @{Nodes}=  Get From Dictionary	${focusedEl}  Nodes 
-    @{Nodes}=  Get From Dictionary  @{Nodes}[${1}]  Nodes
-    ${uri}=  Get Attribute  @{Nodes}[${0}]  uri
-    Run keyword if  '${uri}'!='https://blog.roku.com/developer/files/2016/10/ted-poster-artwork.png'  Fail
+Verify is Season1 is focused
+    Verify is screen loaded    ${Season1Params}
 
-Verify focused element on episodes screen (seasons list)
-    Send key  Left
-    &{focusedEl}=  get focusedElement
-    @{Nodes}=  Get From Dictionary	${focusedEl}  Nodes 
-    @{Nodes}=  Get From Dictionary  @{Nodes}[${0}]  Nodes
-    ${text}=  Get Attribute  @{Nodes}[${2}]  text
-    Run keyword if  '${text}'!='Season${SPACE*2}1'  Fail
+Verify is Season2 is focused
+    Send keys  ${KEYS}
+    Verify is screen loaded    ${Season2Params}
