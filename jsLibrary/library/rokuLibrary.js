@@ -17,9 +17,64 @@ const ecp = require("./client");
 const FormData = require('form-data');
 const fs = require('fs');
 
+const checkAttribute = (node, locator) => {
+    if (Array.isArray(node.Attrs) === false) {
+        return false;
+    }
+    const index = node.Attrs.findIndex(
+        (attrObj) => attrObj.Name.Local.toLowerCase() === locator.attribute.toLowerCase()
+        && attrObj.Value.toLowerCase() === locator.value.toLowerCase()
+    );
+    return index >= 0;
+}
+
+const checkTag = (node, locator) => {
+    return node.XMLName.Local.toLowerCase() === locator.value.toLowerCase();
+}
+
+const checkText = (node, locator) => {
+    if (Array.isArray(node.Attrs) === false) {
+        return false;
+    }
+    const index = node.Attrs.findIndex(
+        (attrObj) => attrObj.Name.Local.toLowerCase() === 'text'
+        && attrObj.Value.toLowerCase() === locator.value.toLowerCase()
+    );
+    return index >= 0;
+}
+
+const methodsMap = {
+    "attr": checkAttribute,
+    "tag": checkTag,
+    "text": checkText
+}
+
 const getMsFromString = (value) => {
     const result = value.split(' ');
     return result[0];
+}
+
+const validateLocator = (locator) => {
+    if (locator.hasOwnProperty('using') === false) {
+        throw new Error('"using" field is required')
+    }
+    if (locator.hasOwnProperty('value') === false) {
+        throw new Error('"value" field is required')
+    }
+    if (locator.using === "attr" && locator.hasOwnProperty('attribute') === false) {
+        throw new Error('"attribute" field is required')
+    }
+}
+
+const isElementMatchLocators = (node, locators) => {
+    return locators.every(locator => {
+        validateLocator(locator)
+        checkMethod = methodsMap[locator.using];
+        if (checkMethod === null) {
+            return false;
+        }
+        return checkMethod(node, locator);
+    });
 }
 
 class Library {
@@ -167,7 +222,7 @@ class Library {
                     return false;
                 }
                 await this.sleep(delay*1000);
-            }         
+            }
         }
     }
 
@@ -194,6 +249,26 @@ class Library {
     verifyIsChannelExist(apps, id) {
         let index =  apps.findIndex((channel) =>  channel.ID == id);
         return index > -1;
+    }
+
+    getChildNodes(parentNode, locators = null) {
+        const childNodes = parentNode.Nodes;
+        let result = [];
+        if (childNodes === null) {
+            return result;
+        }
+        if (locators === null) {
+            return childNodes;
+        }
+        result = result.concat(childNodes.filter(element => {
+            return isElementMatchLocators(element, locators);
+        }));
+        childNodes.forEach(element => {
+            if (element.Nodes !== null) {
+                result = result.concat(this.getChildNodes(element, locators));
+            }
+        })
+        return result;
     }
 }
 
