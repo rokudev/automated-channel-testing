@@ -23,14 +23,7 @@ let library;
 
 describe('test_7-EpisodePicker', () => {
     before(() => {
-        library = new rokuLibrary.Library("192.168.1.64");
-    });
-
-    it('Check if channel exist on the device', async function() { 
-        this.timeout(5000);
-        const apps = await library.getApps();
-        const res = library.verifyIsChannelExist(apps, 'dev');
-        expect(res).equal(true);
+        library = new rokuLibrary.Library("192.168.2.11");
     });
 
     it('should launch the channel', async function() { 
@@ -84,4 +77,3 @@ describe('test_7-EpisodePicker', () => {
         childProcess.kill();
     });
 });
-
