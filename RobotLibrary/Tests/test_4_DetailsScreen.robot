@@ -33,10 +33,6 @@ ${channel_code}  dev
 &{MovieDetailsParams}=  elementData=${MovieDetailsArray}
 
 *** Test Cases ***
-Check if channel exist on the device
-    @{apps}=  Get apps
-    Verify is channel exist    ${apps}  ${channel_code}
-
 Verify is channel launched
     Side load  ../channels/4_DetailsScreen.zip   rokudev   aaaa
     Verify is channel loaded    ${channel_code}    
