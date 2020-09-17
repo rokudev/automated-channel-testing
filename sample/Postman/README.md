@@ -1,3 +1,4 @@
+
 # Importing and testing the Postman collection
 
 Roku's test automation software includes a Postman collection that enables you to test the Roku WebDriver API calls and write test suites. To import the Postman JSON collection and use it to test the Roku WebDriver calls, follow these steps:
@@ -17,3 +18,4 @@ Roku's test automation software includes a Postman collection that enables you t
    ![roku-webdriver-postman-collection](https://image.roku.com/ZHZscHItMTc2/roku-webdriver-postman-collection.png)
 
 7. When you have finished testing, send the **DEL delete session** request to remove the session.
+

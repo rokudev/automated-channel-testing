@@ -337,7 +337,7 @@ describe('rokuLibrary tests', () => {
         }
     });
 
-    it('test verify is playack started success', async () => { 
+    it('test verify is playback started success', async () => {
         nock(baseUrl)
         .get(`/${sessionId}/player`)
         .reply(200, respWithPlayerInfo);
@@ -345,7 +345,7 @@ describe('rokuLibrary tests', () => {
         expect(result).to.equal(true);
     });
 
-    it('test verify is playack started error', async () => { 
+    it('test verify is playback started error', async () => {
         nock(baseUrl)
         .get(`/${sessionId}/player`)
         .reply(500, responseWithError);
