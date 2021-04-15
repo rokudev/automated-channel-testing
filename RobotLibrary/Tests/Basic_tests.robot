@@ -38,7 +38,7 @@ ${channel_code}  dev
 
 *** Test Cases ***
 Channel should be launched
-    Side load  ../sample/channel.zip   rokudev   aaaa
+    Side load  ../sample/channel.zip   rokudev   Manhca33
     Verify is channel loaded    ${channel_code}
 
 Check if details screen showed

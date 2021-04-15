@@ -42,7 +42,7 @@ Verify is search screen loaded
 
 Verify rows number ater search
     Verify is screen loaded    ${PlaceholderParams}
-    Send word  hello
+    Send word  hello@1 r~
     @{rows}=  Get Elements   ${RowParams}   7
     ${len}=    Get length    ${rows}
     Run Keyword If  ${len} != 4   Fail

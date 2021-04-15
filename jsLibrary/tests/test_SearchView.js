@@ -23,7 +23,7 @@ let library;
 
 describe('test_SearchView', () => {
     before(() => {
-        library = new rokuLibrary.Library("192.168.1.64");
+        library = new rokuLibrary.Library("192.168.2.82");
     });
 
     it('should launch the channel', async function() { 
@@ -42,7 +42,7 @@ describe('test_SearchView', () => {
         this.timeout(50000);
         const res = await library.verifyIsScreenLoaded({'elementData': [{'using': 'text', 'value': 'Enter search term'}]});
         expect(res).to.equal(true);
-        await library.sendWord('hello');    
+        await library.sendWord('hi@1~');
         const elements = await library.getElements({'elementData': [{'using': 'tag', 'value': 'Row'}]});
         expect(elements.length).to.equal(4);
     });

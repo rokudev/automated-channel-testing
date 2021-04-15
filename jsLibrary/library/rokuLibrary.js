@@ -190,7 +190,7 @@ class Library {
         await this.sleep(delay*1000);
         let symbols = [];
         word.split('').forEach((el) =>  {
-            symbols.push(`LIT_${el}`);
+            symbols.push(`LIT_${encodeURIComponent(el)}`);
         });
         await this.sendKeys(symbols, 0);
         return true;   

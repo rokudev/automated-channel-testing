@@ -21,6 +21,8 @@ from time import sleep
 from robot.api import logger
 import subprocess
 import json
+import re
+import urllib
 from datetime import datetime, timedelta
 
 class RobotLibrary:
@@ -108,7 +110,7 @@ class RobotLibrary:
         sleep(delay)
         for c in word:
             sleep(0.5)
-            key_press_response = self._client.send_keypress(f"LIT_{c}")
+            key_press_response = self._client.send_keypress(urllib.parse.quote(f"LIT_{c}"))
             self._checkResponse(key_press_response)
 
     
@@ -175,8 +177,10 @@ class RobotLibrary:
         self._checkResponse(response)
         res = json.loads(response.text)
         value = res['value']
-        value['Position'] = int(self._getMsFromString(value['Position']))
-        value['Duration'] = int(self._getMsFromString(value['Duration']))
+        position = value['Position']
+        duration = value['Duration']
+        value['Position'] = self._getMsFromString(position)
+        value['Duration'] = self._getMsFromString(duration)
         return value
 
     @keyword("Verify is playback started")
@@ -269,6 +273,24 @@ class RobotLibrary:
             res = json.loads(response.text)
             raise Exception(res['value']['message'])
     
-    def _getMsFromString(self, str):
-        data = str.split(' ')
-        return data[0]
+    def _getMsFromString(self, strWithMs):
+        ms = 0
+        if type(strWithMs) == str:
+            searchRes = re.search(r'\d+', strWithMs)
+            if searchRes != None:
+                ms = int(searchRes.group())
+        return ms
+    
+    
+    
+    
+    
+     
+
+
+    
+        
+    
+    
+
+    

@@ -1,17 +1,17 @@
 {
     "devices": {
-        "Austin": {
-            "ip_address": "192.168.1.64",
+        "Roku Ultra": {
+            "ip_address": "192.168.1.3",
             "timeout":  20000,
             "pressDelay": 2000
         },
-        "Tyler": {
-            "ip_address": "192.168.1.16",
+        "Roku Express": {
+            "ip_address": "192.168.1.15",
             "timeout":  25000,
             "pressDelay": 1000
         }
     },
-    "server_path": "D:/projects/go/webDriver/src/main.exe",
+    "server_path": "/Users/jduval/Downloads/automated-channel-testing/bin/RokuWebDriver_mac",
     "test": "multipleDevices/test_3_Grid_multi_device.robot",
     "outputdir": "Results"
 }

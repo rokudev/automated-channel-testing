@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 3.1.2 (Python 3.8.4 on darwin)" generated="20210415 10:48:35.608" rpa="false">
+<suite id="s1" name="Basic tests" source="/Users/jduval/Downloads/automated-channel-testing/RobotLibrary/Tests/Basic_tests.robot">
+<test id="s1-t1" name="Channel should be launched">
+<kw name="Side load" library="RobotLibrary">
+<arguments>
+<arg>../sample/channel.zip</arg>
+<arg>rokudev</arg>
+<arg>Manhca33</arg>
+</arguments>
+<msg timestamp="20210415 10:48:35.899" level="FAIL">Post "http://192.168.1.3/plugin_install": http: ContentLength=305 with Body length 0</msg>
+<status status="FAIL" starttime="20210415 10:48:35.735" endtime="20210415 10:48:35.899"></status>
+</kw>
+<status status="FAIL" starttime="20210415 10:48:35.734" endtime="20210415 10:48:35.899" critical="yes">Post "http://192.168.1.3/plugin_install": http: ContentLength=305 with Body length 0</status>
+</test>
+<test id="s1-t2" name="Check if details screen showed">
+<kw name="Send key" library="RobotLibrary">
+<arguments>
+<arg>select</arg>
+<arg>4</arg>
+</arguments>
+<status status="PASS" starttime="20210415 10:48:35.900" endtime="20210415 10:48:39.955"></status>
+</kw>
+<kw name="Verify is screen loaded" library="RobotLibrary">
+<arguments>
+<arg>${Params2}</arg>
+</arguments>
+<msg timestamp="20210415 10:48:42.117" level="INFO">{'elementData': [{'using': 'text', 'value': 'Barack Gates, Bill Obama'}]}</msg>
+<status status="PASS" starttime="20210415 10:48:39.955" endtime="20210415 10:48:42.117"></status>
+</kw>
+<status status="PASS" starttime="20210415 10:48:35.899" endtime="20210415 10:48:42.117" critical="yes"></status>
+</test>
+<test id="s1-t3" name="Check if playback started">
+<kw name="Run Keyword And Ignore Error" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<arguments>
+<arg>Verify is screen loaded</arg>
+<arg>${Params5}</arg>
+<arg>2</arg>
+</arguments>
+<assign>
+<var>${status}</var>
+<var>${value}</var>
+</assign>
+<kw name="Verify is screen loaded" library="RobotLibrary">
+<arguments>
+<arg>${Params5}</arg>
+<arg>2</arg>
+</arguments>
+<msg timestamp="20210415 10:48:44.185" level="INFO">{'elementData': [{'using': 'text', 'value': 'Authenticate to watch'}]}</msg>
+<msg timestamp="20210415 10:48:44.185" level="FAIL">Can't find element</msg>
+<status status="FAIL" starttime="20210415 10:48:42.118" endtime="20210415 10:48:44.186"></status>
+</kw>
+<msg timestamp="20210415 10:48:44.186" level="INFO">${status} = FAIL</msg>
+<msg timestamp="20210415 10:48:44.186" level="INFO">${value} = Can't find element</msg>
+<status status="PASS" starttime="20210415 10:48:42.118" endtime="20210415 10:48:44.186"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>"${status}"=="PASS"</arg>
+<arg>Do auth</arg>
+<arg>ELSE</arg>
+<arg>Send key</arg>
+<arg>select</arg>
+</arguments>
+<kw name="Send key" library="RobotLibrary">
+<arguments>
+<arg>select</arg>
+</arguments>
+<status status="PASS" starttime="20210415 10:48:44.187" endtime="20210415 10:48:46.245"></status>
+</kw>
+<status status="PASS" starttime="20210415 10:48:44.186" endtime="20210415 10:48:46.245"></status>
+</kw>
+<kw name="Verify is playback started" library="RobotLibrary">
+<arguments>
+<arg>20</arg>
+<arg>2</arg>
+</arguments>
+<status status="PASS" starttime="20210415 10:48:46.245" endtime="20210415 10:48:48.331"></status>
+</kw>
+<status status="PASS" starttime="20210415 10:48:42.117" endtime="20210415 10:48:48.331" critical="yes"></status>
+</test>
+<doc>Basic smoke tests</doc>
+<status status="FAIL" starttime="20210415 10:48:35.611" endtime="20210415 10:48:48.332"></status>
+</suite>
+<statistics>
+<total>
+<stat pass="2" fail="1">Critical Tests</stat>
+<stat pass="2" fail="1">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="2" fail="1" id="s1" name="Basic tests">Basic tests</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

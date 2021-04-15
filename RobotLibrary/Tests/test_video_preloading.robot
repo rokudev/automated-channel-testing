@@ -43,10 +43,16 @@ Verify is initial screen loaded
 Verify is details screen loaded
     Send key  Select  4
     Verify is screen loaded    ${DetailsParams}
+    &{player}=  Get player info
+    Log To Console  ${player}
+    Run keyword if  '${player['State']}' != 'startup'  Fail
 
 Verify is playback started
     Send key  Select  4
     Verify is playback started
+    &{player}=  Get player info
+    Log To Console  ${player}
+    Run keyword if  '${player['State']}' != 'play'  Fail
 
 Verify endcard after first video
     Verify is screen loaded    ${EncardParams}  8  10
