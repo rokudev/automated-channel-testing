@@ -75,7 +75,7 @@ To install the [Roku Robot Framework Library](https://developer.roku.com/docs/de
         cd RobotLibrary
         python -m robot.run --outputdir Results --variable ip_address:192.168.1.94 --variable server_path:<path>/automated-channel-testing-master/bin/RokuWebDriver_<os|linux|windows.exe>  Tests/Basic_tests.robot
 
-     > Alternatively, you can the hard code the Roku device IP address and WebDriver server path variables in the **/automated-channel-testing-develop/RobotLibrary/Library/variables.py** file, and then use the following command: `python3 -m robot.run --outputdir Results Tests/Basic_tests.robot`
+     > Alternatively, you can hard code the Roku device IP address and WebDriver server path variables in the **/automated-channel-testing-develop/RobotLibrary/Library/variables.py** file, and then use the following command: `python3 -m robot.run --outputdir Results Tests/Basic_tests.robot`
 
 5. View the generated test case report, which is stored in the specified output directory (**/automated-channel-testing-master/RobotLibrary/Results** by default).
 
