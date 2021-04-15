@@ -16,8 +16,8 @@
 
 def get_variables():
    variables = {
-       'ip_address': '192.168.1.3',
-       'server_path': '/Users/jduval/Downloads/automated-channel-testing/bin/RokuWebDriver_mac',
+       'ip_address': '192.168.1.23',
+       'server_path': 'D:/projects/go/webDriver/src/main.exe',
        'timeout':  20000,
        'pressDelay': 2000
    }
