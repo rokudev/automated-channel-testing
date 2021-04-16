@@ -51,22 +51,13 @@ Test the [Roku WebDriver](https://developer.roku.com/docs/developer-program/dev-
 
 To install the [Roku Robot Framework Library](https://developer.roku.com/docs/developer-program/dev-tools/automated-channel-testing/robot-framework-library.md) and test it on one or more devices, follow these steps:  
 
-1. Optionally, install the Python version of the Roku Robot Framework Library via a local Python package following these steps:
-
-   a. Install the Roku Robot Framework Library:
+1. Optionally, install the Python version of the Roku Robot Framework Library via a local Python package. This enables you to directly import the Roku Robot Framework library in your Robot test case files:
 
         python pip install <path>/automated-channel-testing-master/RobotLibrary
 
-   b. Import the Roku Robot Framework library to the Robot test files:
-
-        Library  Library.RobotLibrary  ${ip_address}  ${timeout}  ${pressDelay}  ${server_path}
-
-
 2. Install the dependencies listed in the **/automated-channel-testing-master/RobotLibrary/requirements.txt** file:
 
-   ```
-   python -m pip install -r /automated-channel-testing-master/RobotLibrary/requirements.txt
-   ```
+        python -m pip install -r /automated-channel-testing-master/RobotLibrary/requirements.txt
 
 3. Update line 41 of the **/automated-channel-testing-master/RobotLibrary/Tests/Basic_tests.robot** file with the password of your Roku device.
 
