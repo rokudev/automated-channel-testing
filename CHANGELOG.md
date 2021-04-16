@@ -6,7 +6,7 @@
 
  * Fixed submitting '@' symbol over "Send word" keyword.
  * Fixed "Get player info" keyword failing when called before playback starts
- * Adjusted sample tests for Robot and JS libraries.
+ * Adjusted sample tests for Robot and JS libraries (added **Sideload** command to automate sideloading of sample channels used for Robot and JavaScript sample tests).
 
 ### Features
 
