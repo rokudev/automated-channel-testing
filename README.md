@@ -43,7 +43,13 @@ Test the [Roku WebDriver](https://developer.roku.com/docs/developer-program/dev-
 
    d.  [Sideload](https://developer.roku.com/docs/developer-program/getting-started/developer-setup.md#step-2-accessing-the-development-application-installer) the sample channel (**channel.zip**) included in the **/automated-channel-testing-master/sample** directory. 
 
-   e. Run the sample Web driver client application. Include the IP address of your Roku device as an argument. If the test is successful, "Test Passed" is output in the console. 
+   e.  Start the RokuWebDriver server by running one of the binaries located in the /bin directory
+
+        RokuWebDriver_linux
+        RokuWebDriver_mac
+        RokuWebDriver_win.exe
+
+   f. Run the sample Web driver client application. Include the IP address of your Roku device as an argument. If the test is successful, "Test Passed" is output in the console. 
 
         python <path>/automated-channel-testing-master/sample/script/main.py <device-ip-address>
 
