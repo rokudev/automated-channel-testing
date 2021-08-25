@@ -238,7 +238,7 @@ func (s *Server) GetTimeoutsHandler() appHandler {
             return &appError{ "The \"username\" field is required ", http.StatusBadRequest, nil}
         }
         pass := r.FormValue("password")
-        if  user == "" {
+        if  pass == "" {
             return &appError{ "The \"password\" field is required ", http.StatusBadRequest, nil}
         }
         res, err := plugin.Load(bytes.NewReader(buf.Bytes()), user, pass);
