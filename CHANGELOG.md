@@ -1,6 +1,6 @@
 # **Roku Automated Channel Testing**
 
-## v.2.3.0 (September2021)
+## v.2.3.0 (September 2021)
 
 ### Bug Fixes
 
