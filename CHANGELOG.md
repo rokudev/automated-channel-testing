@@ -1,64 +1,55 @@
 # **Roku Automated Channel Testing**
-> 09.02.2021
 
-## v.2.3.0
-
-### Bug Fixes
-
- * Fix password validation for "/load" endpoint.
- * Updated Roku Recommends sample channel.
- * Adjusted sample tests that leverage Roku Recommends and SearchView channels.
-
-### Features
-
- * Added possibility to run webdriver on a specific port.
-
-## v.2.2.0
+## v.2.3.0 (September2021)
 
 ### Bug Fixes
 
- * Fix submitting '@' symbol over "Send word" keyword.
- * Fix Get player info keyword fails when it is called before playback starts
- * Adjust sample tests for Robot and JS libraries.
+- Fixed password validation for "/load" endpoint.
+- Updated Roku Recommends sample channel.
+- Adjusted sample tests that leverage Roku Recommends and SearchView channels.
 
 ### Features
 
- * Added possibility to install python version of Robot library as a local python package.
- 
+- Added option to run the Roku WebDriver on a specific port.
 
-## v.2.1.0
+## v.2.2.0 (April 2021)
 
 ### Bug Fixes
 
- * Fix '/element/active' endpoint returns wrong element in some cases.
- * Fix '/elements' endpoint returns wrong elements in case of multiple locators.
- * Adjust/add sample tests for Robot and JS libraries.
+ * Fixed submitting '@' symbol over "Send word" keyword.
+ * Fixed "Get player info" keyword failing when called before playback starts
+ * Adjusted sample tests for Robot and JS libraries (added **Sideload** command to automate sideloading of sample channels used for Robot and JavaScript sample tests).
 
 ### Features
 
- * 'Get child nodes' keyword for Robot library.
- * 'GetChildNodes' method for JavaScript library.
+ * Added pre-built WebDrivers for iOS, Linux, and Windows. 
+ * Added option for installing Python version of Robot library as a local Python package.
 
-## v.2.0.0
-
-### Features
-
- * JavaScript client.
- * Channel side loading.
- * Input deep linking.
- * Timers.
- * Multiple device support for Robot and JavaScript libraries.
-
-## v.1.0.0
+## v.2.1.0 (July 2020)
 
 ### Features
 
- * Initial Release
- * Initial version of a Roku WebDriver.
- * Key press simulation.
- * Grab UI elements.
- * Current app metadata.
+- Added "Get child nodes" method for Robot and JavaScript libraries.
+- Updated WebDriver **/element/active** endpoint to consistently return correct element.
+- Updated WebDriver **/elements** endpoint to returns correct elements when multiple locators are specified.
+- Added and updated sample tests for Robot and JavaScript libraries.
 
- 
+## v.2.0.0 (March 2020)
 
- 
+### Features
+
+- JavaScript client.
+- Channel side loading.
+- Input deep linking.
+- Timers.
+- Multiple device support for Robot and JavaScript libraries.
+
+## v.1.0.0 (December 2019)
+
+### Features
+
+- Initial Release
+- Initial version of a Roku WebDriver.
+- Key press simulation.
+- Grab UI elements.
+- Current app metadata.
