@@ -238,7 +238,7 @@ func (s *Server) GetTimeoutsHandler() appHandler {
             return &appError{ "The \"username\" field is required ", http.StatusBadRequest, nil}
         }
         pass := r.FormValue("password")
-        if  user == "" {
+        if  pass == "" {
             return &appError{ "The \"password\" field is required ", http.StatusBadRequest, nil}
         }
         res, err := plugin.Load(bytes.NewReader(buf.Bytes()), user, pass);
@@ -754,7 +754,14 @@ func (s *Server) GetSourceHandler() appHandler {
     if (len(node.Nodes) <= index) || index < 0 {
         return nil
     }
-    childNode := node.Nodes[index]
+    var childNode ecp.Node
+    for _, childItem := range node.Nodes {
+        nodeIndex := getAttributeValue(childItem, "index")
+        if (focusItem == nodeIndex) {
+            childNode = childItem
+            break
+        }
+    }
     if childNode.Nodes != nil {
         childFocusedNode := findFocusedNode(childNode.Nodes, true)
         if childFocusedNode != nil {

@@ -23,19 +23,19 @@ let library;
 
 describe('test_Roku_Recommends_input', () => {
     before(() => {
-        library = new rokuLibrary.Library("192.168.1.64");
+        library = new rokuLibrary.Library("192.168.1.11");
     });
 
     it('side loading', async function() { 
         this.timeout(25000);
         await library.sideLoad("../channels/Roku_Recommends.zip", "rokudev", "aaaa");
         await library.verifyIsChannelLoaded('dev');
-        await library.sendKey('Home');
     });
 
     it('input deep linking', async function() { 
         this.timeout(50000);
-        await library.inputDeepLinkingData('dev', '12', 'movie');
+        await library.sleep(1000);
+        await library.inputDeepLinkingData('dev', 'decbe34b64ea4ca281dc09997d0f23fd', 'episode');
         library.markTimer();
         await library.sleep(1000);
         let res = await library.verifyIsPlaybackStarted(25, 1);

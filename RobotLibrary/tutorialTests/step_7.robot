@@ -30,7 +30,7 @@ ${channel_code}  dev
 ${Title}=   Roku Recommends
 &{DetailsData}=  using=tag  value=DetailsView
 @{DetailsArray}=  &{DetailsData}
-&{DetailsParam}=  elementData=@{DetailsArray}
+&{DetailsParams}=  elementData=@{DetailsArray}
 
 *** Test Cases ***
 launch the channel and verify

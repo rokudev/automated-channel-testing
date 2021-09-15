@@ -7,8 +7,9 @@ Library  Collections
 
 *** Variables ***
 ${channel_code}  dev
-${content_id}=  12
-${mediaType}=  movie
+${content_id}=  decbe34b64ea4ca281dc09997d0f23fd
+${content_id_input}=  6c9d0951d6d74229afe4adf972b278dd
+${mediaType}=  episode
 
 *** Test Cases ***
 Side load
@@ -31,9 +32,9 @@ Verify is playback started (input)
     Send key  Stop
     Sleep  2
     Mark timer
-    Input deep linking data  ${channel_code}  ${content_id}  ${mediaType}
+    Input deep linking data  ${channel_code}  ${content_id_input}  ${mediaType}
     Verify is playback started  25  2
 
 Verify is playback(input) started quickly
      ${time_in}=  Get timer
-     Run Keyword If  ${time_in} > 10000  Fail
+     Run Keyword If  ${time_in} > 12000  Fail

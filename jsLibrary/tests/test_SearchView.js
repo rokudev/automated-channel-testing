@@ -23,7 +23,7 @@ let library;
 
 describe('test_SearchView', () => {
     before(() => {
-        library = new rokuLibrary.Library("192.168.2.82");
+        library = new rokuLibrary.Library("192.168.1.11");
     });
 
     it('should launch the channel', async function() { 
@@ -38,13 +38,18 @@ describe('test_SearchView', () => {
         expect(res).to.equal(true);
     });
     
-    it('Verify rows number after search', async function() { 
+    it('Verify search input', async function() { 
         this.timeout(50000);
+        const input = 'hello@1 r~';
         const res = await library.verifyIsScreenLoaded({'elementData': [{'using': 'text', 'value': 'Enter search term'}]});
         expect(res).to.equal(true);
-        await library.sendWord('hi@1~');
-        const elements = await library.getElements({'elementData': [{'using': 'tag', 'value': 'Row'}]});
-        expect(elements.length).to.equal(4);
+        await library.sendWord(input);
+        const inputLabel = await library.getElement({
+            'elementData': [{'using': 'tag', 'value': 'Label'}], 
+            'parentData': [{'using': 'tag', 'value': 'TextEditBox'}]
+        });
+        const text = library.getAttribute(inputLabel, 'text');
+        expect(text).to.equal(input);
     });
 
     after(async () => {

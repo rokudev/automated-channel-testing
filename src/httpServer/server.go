@@ -46,9 +46,9 @@ func GetServerInstance() *Server {
 	return server
 }
 
-func (s *Server) Start() {
+func (s *Server) Start(port string) {
 	s.SetUpRoutes()
-	err := http.ListenAndServe(":9000", nil)
+	err := http.ListenAndServe(":" + port, nil)
 	if err != http.ErrServerClosed {
 	   logrus.WithError(err).Error("Http Server stopped unexpected")
 	} else {

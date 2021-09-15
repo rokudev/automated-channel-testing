@@ -31,6 +31,12 @@ ${channel_code}  dev
 &{RowData}=  using=tag  value=Row
 @{RowDataArray}=  &{RowData}
 &{RowParams}=  elementData=${RowDataArray}
+&{ParentTagData}=  using=tag  value=TextEditBox
+@{ParentArray}=  &{ParentTagData}
+&{ElementTagData}=  using=tag  value=Label
+@{ElementArray}=  &{ElementTagData}
+&{LabelParams}=  elementData=${ElementArray}  parentData=${ParentArray}
+${input}=  hello@1 r~
 
 *** Test Cases ***
 Verify is channel launched
@@ -40,9 +46,9 @@ Verify is channel launched
 Verify is search screen loaded
     Verify is screen loaded    ${SearchViewParams}
 
-Verify rows number ater search
+Verify search input
     Verify is screen loaded    ${PlaceholderParams}
-    Send word  hello@1 r~
-    @{rows}=  Get Elements   ${RowParams}   7
-    ${len}=    Get length    ${rows}
-    Run Keyword If  ${len} != 4   Fail
+    Send word  ${input}
+    &{label}=  Get Element   ${LabelParams}
+    ${text}=  Get attribute  ${label}  text
+    Run Keyword If  "${text}" != "${input}"   Fail

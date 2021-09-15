@@ -7,8 +7,8 @@ Library  Collections
 
 *** Variables ***
 ${channel_code}  dev
-${content_id}=  12
-${mediaType}=  movie
+${content_id}=  decbe34b64ea4ca281dc09997d0f23fd
+${mediaType}=  episode
 
 *** Test Cases ***
 Side load

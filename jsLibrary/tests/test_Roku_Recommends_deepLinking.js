@@ -23,7 +23,7 @@ let library;
 
 describe('test_Roku_Recommends_deeplinking', () => {
     before(() => {
-        library = new rokuLibrary.Library("192.168.1.64");
+        library = new rokuLibrary.Library("192.168.1.11");
     });
 
     it('side loading', async function() { 
@@ -34,7 +34,7 @@ describe('test_Roku_Recommends_deeplinking', () => {
 
     it('should launch the channel', async function() { 
         this.timeout(5000);
-        await library.launchTheChannel('dev', '12', 'movie');
+        await library.launchTheChannel('dev', 'decbe34b64ea4ca281dc09997d0f23fd', 'episode');
         await library.verifyIsChannelLoaded('dev');
     });
     

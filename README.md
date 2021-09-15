@@ -1,231 +1,239 @@
 # Automated channel testing
 
-Roku channel developers can use Roku's test automation software to write and execute test cases, including channel purchasing, performance, deep linking, and other certification-related testing. Roku provides custom [Selenium](https://selenium.dev)-based [WebDriver APIs](https://developer.roku.com/docs/developer-program/dev-tools/automated-channel-testing/web-driver.md) for sending commands to launch channels, send keypresses, and check whether SceneGraph components are present on the screen. Channels can use the WebDriver APIs to control a Roku device, while using a test framework or programming language to create, run, log, and record test cases. To make automated testing even easier, Roku provides [Robot](https://developer.roku.com/docs/developer-program/dev-tools/automated-channel-testing/robot-framework-library.md) and [JavaScript](https://developer.roku.com/docs/developer-program/dev-tools/automated-channel-testing/javascript-library.md) libraries, which support running tests on multiple devices at the same time. 
-
-Executing test automation allows channels to run state-driven UI testing for a number of scenarios. For example, channels can create a test case that installs a channel and launches it with a specific contentID and mediaType to verify that deep linking works. Authenticated channels can execute more complex test cases such as launching a channel, trying to play content before authenticating the user, entering valid/invalid credentials, and then trying to play content again. 
-
-All test cases can be run simultaneously on multiple Roku devices. This is useful for testing channel performance across different models with varying RAM and CPU. It is especially important for certification testing, which requires channels to meet [performance criteria](https://developer.roku.com/docs/developer-program/certification/certification.md#3-performance) that varies for different device types.
-
-Implementing automated testing speeds up channel development by reducing the number of manual UI tests that need to be run for simple to complex test cases.
-
-> Roku's test automation tools require Roku OS 9.1 or higher.
-
-> To test production channels with the Roku test automation tools, you must [package the channel](https://developer.roku.com/docs/developer-program/publishing/packaging-channels.md#rekeying) on your Roku device using the same Roku developer account linked to the production version of the channel.
+Roku channel developers can use Roku's test automation software to write and execute test cases, including channel purchasing, performance, deep linking, and other certification-related testing. Roku provides custom Selenium-based WebDriver APIs for sending commands to launch channels, send keypresses, and check whether a specific screen has been loaded. Channels can use the WebDriver APIs to control a Roku device, while using a test framework or programming language to create, run, log, and record test cases. To make automated testing even easier, this software includes a library for creating Robot framework-compliant test cases.
 
 ## Overview
 
-Test cases can be written with the [Roku Robot Framework Library](https://developer.roku.com/docs/developer-program/dev-tools/automated-channel-testing/robot-framework-library.md), [Roku JavaScript library](https://developer.roku.com/docs/developer-program/dev-tools/automated-channel-testing/javascript-library.md), another test framework, or a programming language such as Python, JavaScript, or Go. The test scripts send command requests to the [Roku WebDriver](https://developer.roku.com/docs/developer-program/dev-tools/automated-channel-testing/web-driver.md) via the [JSON Wire Protocol](https://github.com/SeleniumHQ/selenium/wiki/JsonWireProtocol). 
+Test cases can be written with the Roku Robot Framework Library (or another test framework) or a programming language such as Python, JavaScript, or Go. The test scripts send command requests to the Roku WebDriver via the [JSON Wire Protocol](https://github.com/SeleniumHQ/selenium/wiki/JsonWireProtocol). 
 
-The Roku WebDriver includes an HTTP server that receives the command requests and an [External Control Protocol (ECP)](https://developer.roku.com/docs/developer-program/debugging/external-control-api.md) client that translates them into ECP requests, which it then routes to the target device. 
-
-The device returns the result of the command and XML data back to the Roku WebDriver, which then passes this information back to the test script as a JSON object (via the WebDriver client application).
-
-## Channel UI testing
-
-The Roku WebDriver includes a set of [APIs](https://developer.roku.com/docs/developer-program/dev-tools/automated-channel-testing/web-driver.md#roku-webdriver-apis) that enable developers to run state-driven UI tests. For example, the RokuWebDriver has an [**element** API](https://developer.roku.com/docs/developer-program/dev-tools/automated-channel-testing/web-driver.md#POST-v1/session/:sessionId/element) to check if a specific SceneGraph component is present on the screen in order to  determine whether a specific screen has been loaded. In addition, the Roku Robot Framework library has [keywords](https://developer.roku.com/docs/developer-program/dev-tools/automated-channel-testing/robot-framework-library.md#keywords) that are mapped to the Roku WebDriver APIs so that developers can execute channel UI-based test cases with the Robot Framework. 
+The Roku WebDriver includes an HTTP server that receives the command requests and an [External Control Protocol (ECP)](https://developer.roku.com/docs/developer-program/debugging/external-control-api.md) client that translates them into ECP requests, which it then routes to the target device. The device returns the result of the command and XML data back to the Roku WebDriver, which then passes this information back to the test script as a JSON object (via the WebDriver client application).
 
 ## Getting started
 
-Test the [Roku WebDriver](https://developer.roku.com/docs/developer-program/dev-tools/automated-channel-testing/web-driver.md) following these steps:  
+To build, configure, and test the Roku WebDriver and Roku Robot Framework Library, follow these steps:
 
-1. Clone the [Roku automated channel testing repository](https://gitlab.eng.roku.com/developer_web_tools/roku-automated-channel-testing) or download it as a zip file.
+**Important note:** You can use already built version of Roku webDriver for Windows, Linux or Mac(see bin folder) instead of steps 1-7
+
+1. [Download](https://golang.org/dl/) and install the Go programming language (the Roku WebDriver server is implemented as a Go application). 
 
 
-2. Run Roku's Python-based sample WebDriver client application following these steps: 
+2. Clone the [Roku automated channel testing repository](https://gitlab.eng.roku.com/developer_web_tools/roku-automated-channel-testing) or download it as a zip file.
 
-   a. [Download](https://www.python.org/downloads) and install Python 3.7 (or higher). Set the version you install as the default version of Python on your computer.
 
-   b. Download and install the Python package installer ([pip](https://pypi.org/project/pip)).
+3. Set the "GOPATH" environment variable to the path of the **roku-automated-channel-testing** folder ($APP_PATH).
+
+
+4. Install the following dependencies ([mux](https://github.com/gorilla/mux/blob/master/README.md) is a URL router and dispatcher; [logrus](https://github.com/sirupsen/logrus/blob/master/README.md) is a structured logger):
+
+        cd <path>/roku-automated-channel-testing-develop/src
+        go get github.com/gorilla/mux
+        go get github.com/sirupsen/logrus
+
+5. Build the Roku WebDriver project:
+
+        go build main.go
+
+6.  Run the **webDriver** executable to start the Roku WebDriver server. Default port is 9000 but you can run webdriver on a specific port:
+
+        ./RokuWebDriver_mac 9001
+
+
+7. Test the Roku WebDriver server following these steps:
+
+   a. Install the [**assert**](https://godoc.org/github.com/stretchr/testify/assert) package, which provides testing tools to be used with Go applications.
+
+        go get github.com/stretchr/testify/assert
+
+   b. Test the ECP client:
+
+        go test ecpClient
+
+   c. Test the HTTP server (the host is "localhost"; the port used is 9000):
+
+        go test httpServer
+        
+### Steps for Robot library
+
+8. Run Roku's Python-based sample WebDriver client application following these steps: 
+
+   a. Download and install python: https://www.python.org/downloads.
+   Important: python version must be 3.7 or higher. Also, this version must be set as default version of python.
+   
+   b. Download and install pip: https://pypi.org/project/pip
 
    c. Install the [**requests**](https://pypi.org/project/requests) HTTP library for Python, which enables the sample client application to send HTTP 1.1 requests:
 
-       python -m pip install requests
+        python -m pip install requests
 
-   d.  [Sideload](https://developer.roku.com/docs/developer-program/getting-started/developer-setup.md#step-2-accessing-the-development-application-installer) the sample channel (**channel.zip**) included in the **/automated-channel-testing-master/sample** directory. 
+   d. Sideload the sample channel (**channel.zip**) included in the **roku-auotmated-channel-testing/sample** directory. 
 
-   e. Run the sample Web driver client application. Include the IP address of your Roku device as an argument. If the test is successful, "Test Passed" is output in the console. 
+   e. Run the sample Web driver client application: 
 
-        python <path>/automated-channel-testing-master/sample/script/main.py <device-ip-address>
+        python <path>/roku-automated-channel-testing-develop/sample/script/main.py  <device_ip>
 
-### Installing and testing the Robot Framework Library
 
-To install the [Roku Robot Framework Library](https://developer.roku.com/docs/developer-program/dev-tools/automated-channel-testing/robot-framework-library.md) and test it on one or more devices, follow these steps:  
+9. Configure and test the Roku Robot Framework Library following these steps:
 
-1. Optionally, install the Python version of the Roku Robot Framework Library via a local Python package. This enables you to directly import the Roku Robot Framework library in your Robot test case files:
+   a. Install the dependencies listed in the **/roku-automated-channel-testing-develop/RobotLibrary/requirements.txt** file:
 
-        python pip install <path>/automated-channel-testing-master/RobotLibrary
+        python -m pip install -r requirements.txt
 
-2. Install the dependencies listed in the **/automated-channel-testing-master/RobotLibrary/requirements.txt** file:
+   b. Sideload the sample Robot framework test  (**channel.zip**) included in the **roku-auotmated-channel-testing/RobotLibrary** directory.
 
-        python -m pip install -r /automated-channel-testing-master/RobotLibrary/requirements.txt
+   c. Visit RobotLibrary\Library\variables.py file and update it with IP address of device and path to webDriver
 
-3. Update line 41 of the **/automated-channel-testing-master/RobotLibrary/Tests/Basic_tests.robot** file with the password of your Roku device.
+   d. Run the sample basic Robot test case (test cases must be run from the **RobotLibrary** folder to be completed successfully):
 
-4. Run the sample basic Robot test case on a single device. When running the Robot tests and samples, you must run them from the **RobotLibrary** folder. You must also provide the Roku device IP address and WebDriver server path as variables in the console as demonstrated in the following example:
+       cd RobotLibrary
+       python -m robot.run --outputdir Results Tests/Basic_tests.robot
+   
+   > When running the tests and samples, you can provide the IP address and WebDriver server path as variables in the console as demonstrated in the following example: 
 
-        cd RobotLibrary
-        python -m robot.run --outputdir Results --variable ip_address:192.168.1.94 --variable server_path:<path>/automated-channel-testing-master/bin/RokuWebDriver_<os|linux|windows.exe>  Tests/Basic_tests.robot
+       python -m robot.run --outputdir Results --variable ip_address:192.168.1.94 --variable server_path:D:/projects/go/webDriver/src/main.exe  Tests/Basic_tests.robot
+10. View the generated test case report and log, which are stored in the specified output directory.
 
-     > Alternatively, you can hard code the Roku device IP address and WebDriver server path variables in the **/automated-channel-testing-develop/RobotLibrary/Library/variables.py** file, and then use the following command: `python3 -m robot.run --outputdir Results Tests/Basic_tests.robot`
+### Install Robot library as package
+Requirements: python( version 3.7 or higher), pip
 
-5. View the generated test case report, which is stored in the specified output directory (**/automated-channel-testing-master/RobotLibrary/Results** by default).
+       python pip install <local_path>/roku-automated-channel-testing/RobotLibrary
 
-6. Run the sample basic Robot test case on multiple devices following these steps:
+After that you will be able to import RobotLibrary to robot test file by the following way:
 
-   a. Update the JSON configuration file (**config.json**) in the **automated-channel-testing-master/RobotLibrary/multipleDevices** directory, which contains the Roku devices to be used for testing, the Web driver server path, test case, and the output directory.
+       Library  Library.RobotLibrary  ${ip_address}  ${timeout}  ${pressDelay}  ${server_path}
 
-   Each Roku device is an object that has an arbitrary name and a key-value pair with the device's IP address. Key-value pairs may also be provided for the timeout and keypress delay to be used for the test on that device (these override the global test values specified in the Robot test case).
+   
+### Steps for JavaScript library
 
-   The syntax of the **config.json** file is as follows:
+8. Configure and test the Roku JavaScript Library following these steps:
+ 
+   a. Download and install nodeJs: https://nodejs.org/en/
 
-        {
-            "devices": {
-                "Device 1 name": {
-                    "ip_address": <string>,
-                    "timeout":  <number>,
-                    "pressDelay": <number>
-                },
-                "Device 2 name": {
-                    "ip_address": <string>,
-                    "timeout":  <number>
-                }
-            },
-            "server_path": <string>,
-            "test": <string>,
-            "outputdir": <string> 
-        }
-
-   The following example demonstrates how to write the **config.json** file: 
-
-        {
-            "devices": {
-                "Amarillo": {
-                    "ip_address": "192.168.1.64",
-                    "timeout":  20000,
-                    "pressDelay": 2000
-                },
-                "Littlefield": {
-                    "ip_address": 192.168.1.16,
-                    "timeout":  25000,
-                    "pressDelay": 1000
-                }
-            },
-            "server_path": "/automated-channel-testing-master/bin/RokuWebDriver_<os|linux|windows.exe>,
-            "test": "Tests/Basic_tests_multi_device.robot",
-            "outputdir": "Results"
-        }
-
-   b.  [Sideload](https://developer.roku.com/docs/developer-program/getting-started/developer-setup.md#step-2-accessing-the-development-application-installer) the sample channel (**channel.zip**) in the **/automated-channel-testing-master/sample** folder.
-
-   c.  Update the **/automated-channel-testing-master/RobotLibrary/Library/variables.py** file with the IP address of the Roku test device and WebDriver path.
-
-   d. Run the following console command:
-
-        cd RobotLibrary
-        python multipleDevices/multi.py multipleDevices/config.json
-
-   e. View the generated test case report and log for each device, which are stored in the specified output directory (**/automated-channel-testing-master/RobotLibrary/Results** by default).
-
-### Installing and testing the Roku JavaScript Library 
-
-To install the [Roku JavaScript  Library](https://developer.roku.com/docs/developer-program/dev-tools/automated-channel-testing/javascript-library.md) and test it on one or more devices, follow these steps: 
-
-1. Download and install the [node.js](https://nodejs.org/en/) JavaScript runtime environment.
-
-2. Download and install the [Yarn](https://classic.yarnpkg.com/en/docs/install) JavaScript package manager.
-
-3. Install the dependencies listed in the **/automated-channel-testing-master/jsLibrary/package.json** file:
+   b. Download and install yarn: https://classic.yarnpkg.com/en/docs/install
+   
+   c. Install the dependencies listed in the **/roku-automated-channel-testing-develop/jsLibrary/package.json** file:
 
         yarn install
+        
+   d. Run the sample basic test case:
+   
+      1.) Using yarn:
 
-4. To use the [Mocha](https://mochajs.org/) JavaScript test framework and run tests on multiple devices, globally install Mocha and [Mochawesome](https://www.npmjs.com/package/mochawesome): 
+        yarn test
+        
+    In this case the following line should be added to the package.json:
+
+        "scripts": {
+            "test": "mocha \"tests/test_basic.js\""
+        },
+    
+      2.) Using mocha:
+
+        mocha  tests/test_basic.js
+        
+    In this case mocha must be installed globally:
 
         yarn global add mocha
+        
+## Multiple device support
+
+Multiple device support provides opportunity to run specified test file(s) on a few devices in parallel. Both RobotLibrary and JsLibrary support multiple device test run. 
+
+Important: channel side loading("sideLoad" method in jsLibrary and "Side load" keyword in RobotLibrary) can cause an error in multiple device case so be careful when use it in multiple device tests.
+
+### JavaScript multiple device support
+
+1.) Install mocha and mochawesome globally:
+
+        yarn global add mocha
+        
         yarn global add mochawesome
 
-5. Update the **/automated-channel-testing-master/jsLibrary/tests/test_basic.js** file with the following: 
+2.) Run the following console cmd to start script:
 
-   a. In line 20, update the WebDriver server path.
+        node multipleDevices/multi.js   <path_to_config.json>
 
-   b. In line 27, update the IP address to your Roku device. 
 
-   c. In line 28, update the password. 
+config.json contains details needed for multi.js script run.  It has the following structure:
 
-6. Run the sample basic JavaScript test case on a single device. When running the JavaScript tests and samples, you must run them from the **jsLibrary** folder
-
-        yarn tests/test_basic.js
-
-   To run the test using Mocha and report the test results with Mochawesome, enter the following command:
-
-         mocha tests/test_basic.js --reporter mochawesome
-
-7. View the generated test case report, which is stored in the **mochawesome-report** directory.
-
-8. Run the sample basic JavaScript test case on multiple devices following these steps:
-
-   a. Update the JSON configuration file (**config.json**) in the **/automated-channel-testing-master/jsLibrary/multipleDevices** directory, which contains the Roku devices to be used for testing, the Web driver server path, test case, and the output directory. 
-
-   Each Roku device is an object that has an arbitrary name and a key-value pair with the device's IP address. Key-value pairs may also be provided for the timeout and keypress delay to be used for the test on that device (these override the global test values specified in the Robot test case).
-
-   The syntax of the **config.json** file is as follows:
-
-        {
-            "devices": {
-                "Device 1 name": {
-                    "ip_address": <string>,
-                    "timeout":  <number>,
-                    "pressDelay": <number>
-                },
-                "Device 2 name": {
-                    "ip_address": <string>,
-                    "timeout":  <number>
-                }
-            },
-            "server_path": <string>,
-            "test": <string>,
-            "outputdir": <string> 
+    { "devices": {
+        "Austin": {
+            "ip_address": <string>,
+            "timeout":  <number>,
+            "pressDelay": <number>
+        },
+       "Cooper": {
+            "ip_address": <string>,
+            "timeout":  <number>
         }
+    },
+    "server_path": <string>,
+    "test": <string>,
+    "outputdir": <string> 
+    }
 
-   The following example demonstrates how to write the **config.json** file: 
 
-        {
-            "devices": {
-                "Amarillo": {
-                    "ip_address": "192.168.1.64",
-                    "timeout":  20000,
-                    "pressDelay": 2000
-                },
-                "Littlefield": {
-                    "ip_address": 192.168.1.16,
-                    "timeout":  25000,
-                    "pressDelay": 1000
-                }
-            },
-            "server_path": "/automated-channel-testing-master/bin/RokuWebDriver_<os|linux|windows.exe>,
-            "test": "multipleDevices/multiple_devices_test_basics.js",
-            "outputdir": "Results"
+
+Fields:
+
+1.) devices(required): Contains "key-value" pairs where:
+
+    key - name of device(can be what ever user want);
+
+    value - object with fields  which value should be used in tests for this device.
+
+2.) server_path": path to webDriver launch file. multi.js will start one  instance of webDriver for all test executions.
+
+3.) "test': path to javeScript test which use want to run on specified devices.
+
+4.)  "outputdir": path to folder where report/log files will be stored.
+
+
+
+### Robot Framework multiple device support
+
+Run the following console command:
+
+        cd  RobotLibrary
+        <path_to_python>/python     multipleDevices/multi.py   <path_to_config.json>
+
+
+config.json contains details needed for multi.py script run.  It has the following structure:
+
+    {
+    "devices": {
+        "Austin": {
+            "ip_address": <string>,
+            "timeout":  <number>,
+            "pressDelay": <number>
+        },
+       "Cooper": {
+            "ip_address": <string>,
+            "timeout":  <number>
         }
+    },
+    "server_path": <string>,
+    "test": <string>,
+    "outputdir": <string> 
+    }
 
-   b.  [Sideload](https://developer.roku.com/docs/developer-program/getting-started/developer-setup.md#step-2-accessing-the-development-application-installer) the sample channel (**channel.zip**) in the **/automated-channel-testing-master/sample** folder.
 
-   c. Run the following console command:
 
-        node multipleDevices/multi.js  config.json
 
-   d. View the generated test case report and log for each device, which are stored in the specified output directory (**/automated-channel-testing-master/jsLibrary/Results** by default).
+Fields:
 
-### Postman collection
+1.) devices(required): Contains "key-value" pairs where:
 
-To import the Postman JSON collection and use it to test the Roku WebDriver API calls, follow these steps:
+    key - name of device(can be what ever user want) ;
 
-1. [Download](https://www.postman.com/downloads/) Postman.
+    value - object with fields  which value should be used in tests for this device. this fields will override fields in test.
 
-2. Verify that the Roku WebDriver server is running (to start the WebDriver, run the **main** executable in the **/automated-channel-testing-master/src** folder).
+2.) server_path": path to webDriver launch file. multi.py will start one  instance of webDriver for all test executions. 
 
-3. [Sideload](/docs/developer-program/getting-started/developer-setup.md#step-2-accessing-the-development-application-installer) the sample channel (**channel.zip**) in the **/automated-channel-testing-master/sample** folder.
+3.) "test': path to robot test which use want to run on specified devices.
 
-4. In Postman, import the **/automated-channel-testing-master/sample/Postman/WebDriver_endpoints** Postman collection.
+4.)  "outputdir": path to folder where report/log files will be stored.
 
-5. Create a new session. To do this, click the **POST create session** request, update the IP address to your Roku device, and then click **Send**.
 
-6. Execute the requests in the Postman collection to test the Roku WebDriver.
+
+
+       
