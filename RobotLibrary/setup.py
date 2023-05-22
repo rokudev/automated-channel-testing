@@ -6,6 +6,6 @@ setuptools.setup(
     packages=['Library'],
     install_requires=[
           'robotframework==3.1.2',
-          'requests==2.22.0'
+          'requests==2.31.0'
       ]
 )
