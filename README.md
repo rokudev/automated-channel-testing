@@ -1,3 +1,11 @@
+# automated-channel-testing has moved to GitLab
+
+**This project has moved.** Development now continues at **https://gitlab.com/rokudev/automated-channel-testing**.
+
+This GitHub repository is archived and read-only. It is kept only as a pointer to the new home. Please open new issues and merge requests on GitLab.
+
+---
+
 # Automated channel testing
 
 Roku channel developers can use Roku's test automation software to write and execute test cases, including channel purchasing, performance, deep linking, and other certification-related testing. Roku provides custom [Selenium](https://selenium.dev)-based [WebDriver APIs](https://developer.roku.com/docs/developer-program/dev-tools/automated-channel-testing/web-driver.md) for sending commands to launch channels, send keypresses, and check whether SceneGraph components are present on the screen. Channels can use the WebDriver APIs to control a Roku device, while using a test framework or programming language to create, run, log, and record test cases. To make automated testing even easier, Roku provides [Robot](https://developer.roku.com/docs/developer-program/dev-tools/automated-channel-testing/robot-framework-library.md) and [JavaScript](https://developer.roku.com/docs/developer-program/dev-tools/automated-channel-testing/javascript-library.md) libraries, which support running tests on multiple devices at the same time. 
